@@ -1,0 +1,117 @@
+root_path : /root/yanbinwa/ansible
+ansible_host : /target/ansible/host.template
+docker_container : /target/docker/docker_container.sh
+
+ansible_main : /target/ansible/main.yaml
+
+components:
+  zookeeper :
+    package : /package/zookeeper/zookeeper-3.4.6.tar.gz
+    template : /template/zookeeper/zookeeper.yaml
+    setup_dir : /opt
+    conf_dir : /opt/zookeeper-3.4.6/conf
+    data_dir : /root/zookeeper/data
+    dataLog_dir : /root/zookeeper/dataLog
+    serverScript : /opt/zookeeper-3.4.6/bin/zkServer.sh
+    
+    devices:
+      zookeeper_1 :
+        name : zookeeper_1
+        user : root
+        password : cisco123
+        ip : 172.18.0.11
+        port : 2191
+        myid : /conf/zookeeper/zookeeper_1/myid
+        conf : /conf/zookeeper/zookeeper_1/zoo.cfg
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/zookeeper/zookeeper_1.yaml
+
+      zookeeper_2:
+        name : zookeeper_2
+        user : root
+        password : cisco123
+        ip : 172.18.0.12
+        port : 2192
+        myid : /conf/zookeeper/zookeeper_2/myid
+        conf : /conf/zookeeper/zookeeper_2/zoo.cfg
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/zookeeper/zookeeper_2.yaml
+
+      zookeeper_3:
+        name : zookeeper_3
+        user : root
+        password : cisco123
+        ip : 172.18.0.13
+        port : 2193
+        myid : /conf/zookeeper/zookeeper_3/myid
+        conf : /conf/zookeeper/zookeeper_3/zoo.cfg
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/zookeeper/zookeeper_3.yaml
+
+  orchestration:
+    package : /package/orchestration/serviceManagerOrchestration-1.0-SNAPSHOT.jar
+    template : /template/orchestration/orchestration.yaml
+    setup_dir : /opt
+    devices :
+      orchestration_active :
+        name : orchestration_active
+        user : root
+        password : cisco123
+        ip : 172.18.0.21
+        port : 8091
+        command : 'nohup java -Dspring.profiles.active=active -jar /opt/serviceManagerOrchestration-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/orchestration/orchestration_active.yaml
+
+      orchestration_standby :
+        name : orchestration_standby
+        user : root
+        password : cisco123
+        ip : 172.18.0.22
+        port : 8092
+        command : 'nohup java -Dspring.profiles.active=standby -jar /opt/serviceManagerOrchestration-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/orchestration/orchestration_standby.yaml
+
+  collection:
+    package : /package/collection/serviceManagerCollection-1.0-SNAPSHOT.jar
+    template : /template/collection/collection.yaml
+    setup_dir : /opt
+    devices :
+      collection_A :
+        name : collection_A
+        user : root
+        password : cisco123
+        ip : 172.18.0.31
+        port : 8101
+        command : 'nohup java -Dspring.profiles.active=serviceA -jar /opt/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/collection/collection_A.yaml
+        
+      collection_B :
+        name : collection_B
+        user : root
+        password : cisco123
+        ip : 172.18.0.32
+        port : 8102
+        command : 'nohup java -Dspring.profiles.active=serviceB -jar /opt/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/collection/collection_B.yaml
+        
+      collection_C :
+        name : collection_C
+        user : root
+        password : cisco123
+        ip : 172.18.0.33
+        port : 8103
+        command : 'nohup java -Dspring.profiles.active=serviceC -jar /opt/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/collection/collection_C.yaml

@@ -1,0 +1,23 @@
+---
+- hosts: zookeeper_1
+  user: root
+  sudo: yes
+  tasks:
+
+  - name: Unarchive the zookeeper install package to remote machine
+    unarchive: src=/Users/yanbinwa/Documents/workspace/springboot/serviceManager/serviceManagerSetup/package/zookeeper/zookeeper-3.4.6.tar.gz  dest=/opt
+
+  - name: Copy zookeeper zoo.cfg
+    copy: src=/Users/yanbinwa/Documents/workspace/springboot/serviceManager/serviceManagerSetup/conf/zookeeper/zookeeper_1/zoo.cfg  dest=/opt/zookeeper-3.4.6/conf
+
+  - name: Create data dir 
+    file: path=/root/zookeeper/data  state=directory  mode=0755
+
+  - name: Create dataLog dir
+    file: path=/root/zookeeper/dataLog  state=directory  mode=0755
+
+  - name: Copy myid file
+    copy: src=/Users/yanbinwa/Documents/workspace/springboot/serviceManager/serviceManagerSetup/conf/zookeeper/zookeeper_1/myid  dest=/root/zookeeper/data
+
+  - name: Start zookeeper
+    command: /opt/zookeeper-3.4.6/bin/zkServer.sh start

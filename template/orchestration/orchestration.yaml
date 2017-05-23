@@ -1,0 +1,11 @@
+---
+- hosts: $_hostname_
+  user: $_user_
+  sudo: yes
+  tasks:
+
+  - name: Copy orchestration jar
+    copy: src=$_orchestrationJarSrc_  dest=$_orchestrationJarInstallPath_
+
+  - name: Start orchestration service
+    shell: $_orchestrationStartCommand_

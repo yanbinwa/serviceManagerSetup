@@ -1,0 +1,11 @@
+---
+- hosts: $_hostname_
+  user: $_user_
+  sudo: yes
+  tasks:
+
+  - name: Copy collection jar
+    copy: src=$_collectionJarSrc_  dest=$_collectionJarInstallPath_
+
+  - name: Start collection service
+    shell: $_collectionStartCommand_

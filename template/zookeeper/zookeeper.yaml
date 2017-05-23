@@ -1,0 +1,23 @@
+---
+- hosts: $_hostname_
+  user: $_user_
+  sudo: yes
+  tasks:
+
+  - name: Unarchive the zookeeper install package to remote machine
+    unarchive: src=$_zookeeperPackage_  dest=$_zookeeperPackageInstallPath_
+
+  - name: Copy zookeeper zoo.cfg
+    copy: src=$_zookeeperConfSrc_  dest=$_zookeeperConfTarget_
+
+  - name: Create data dir 
+    file: path=$_zookeeperDataDir_  state=directory  mode=0755
+
+  - name: Create dataLog dir
+    file: path=$_zookeeperDataLogDir_  state=directory  mode=0755
+
+  - name: Copy myid file
+    copy: src=$_zookeeperMyidSrc_  dest=$_zookeeperDataDir_
+
+  - name: Start zookeeper
+    command: $_zookeeperServerScript_ start

@@ -1,0 +1,11 @@
+---
+- hosts: orchestration_active
+  user: root
+  sudo: yes
+  tasks:
+
+  - name: Copy orchestration jar
+    copy: src=/Users/yanbinwa/Documents/workspace/springboot/serviceManager/serviceManagerSetup/package/orchestration/serviceManagerOrchestration-1.0-SNAPSHOT.jar  dest=/opt
+
+  - name: Start orchestration service
+    command: nohup java -Dspring.profiles.active=active -jar /opt/serviceManagerOrchestration-1.0-SNAPSHOT.jar 2>&1 > /dev/null &
