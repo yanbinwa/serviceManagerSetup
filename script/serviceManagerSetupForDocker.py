@@ -56,3 +56,4 @@ def buildDockerContainerScript(dockerContainerFile, docker_container_map):
                           " " + dockerContainer[DOCKER_CONTAINER_IMAGE_KEY] + " /bin/bash\n"
         os.write(dockerContainerScriptFile, command)
         
+    os.close(dockerContainerScriptFile)    

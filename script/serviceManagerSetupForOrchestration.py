@@ -74,3 +74,4 @@ def buildAnsibleOrchestration(orchestration_template_file, orchestration_ansible
             
         orchestrationAnsibleFileScript = os.open(orchestrationAnsibleFile, os.O_CREAT|os.O_RDWR)
         os.write(orchestrationAnsibleFileScript, tempTemplate)
+        os.close(orchestrationAnsibleFileScript)

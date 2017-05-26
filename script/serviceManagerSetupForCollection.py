@@ -75,3 +75,4 @@ def buildAnsibleCollection(collection_template_file, collection_ansible_map):
             
         collectionAnsibleFileScript = os.open(collectionAnsibleFile, os.O_CREAT|os.O_RDWR)
         os.write(collectionAnsibleFileScript, tempTemplate)
+        os.close(collectionAnsibleFileScript)

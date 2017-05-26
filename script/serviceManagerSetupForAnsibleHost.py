@@ -45,7 +45,7 @@ def setupAnsibleHost(ansibleHostPath, components):
 def buildAnsibleHost(ansibleHostPath, host_map):
     if os.path.exists(ansibleHostPath):
         os.remove(ansibleHostPath)
-        
+    
     ansibleHostFile = os.open(ansibleHostPath, os.O_CREAT|os.O_RDWR)
     for hostKey in host_map.keys():
         hostHeader = "[" + hostKey + "]" + "\n"
@@ -55,7 +55,8 @@ def buildAnsibleHost(ansibleHostPath, host_map):
                                                " " + ANSIBLE_HOST_PASSWORD_TAG + "=" + host[ANSIBLE_HOST_PASSWORD_KEY] + \
                                                " " + ANSIBLE_HOST_SUDO_PASSWORD_TAG + "=" + host[ANSIBLE_HOST_PASSWORD_KEY] + "\n"
         os.write(ansibleHostFile, hostBody)
-    
+        
+    os.close(ansibleHostFile)
     
     
        

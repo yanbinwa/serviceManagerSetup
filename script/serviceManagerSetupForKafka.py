@@ -94,3 +94,4 @@ def buildAnsibleKafka(kafka_template_file, kafka_ansible_map):
             
         kafkaAnsibleFileScript = os.open(kafkaAnsibleFile, os.O_CREAT|os.O_RDWR)
         os.write(kafkaAnsibleFileScript, tempTemplate)
+        os.close(kafkaAnsibleFileScript)

@@ -98,3 +98,4 @@ def buildAnsibleZookeeper(zookeeper_template_file, zookeeper_ansible_map):
             
         zookeeperAnsibleFileScript = os.open(zookeeperAnsibleFile, os.O_CREAT|os.O_RDWR)
         os.write(zookeeperAnsibleFileScript, tempTemplate)
+        os.close(zookeeperAnsibleFileScript)
