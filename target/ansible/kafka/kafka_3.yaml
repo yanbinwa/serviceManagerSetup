@@ -1,0 +1,17 @@
+---
+- hosts: kafka_3
+  user: root
+  sudo: yes
+  tasks:
+
+  - name: Unarchive the kafka install package to remote machine
+    unarchive: src=/Users/yanbinwa/Documents/workspace/springboot/serviceManager/serviceManagerSetup/package/kafka/kafka_2.11-0.9.0.0.tgz  dest=/opt
+
+  - name: Copy kafka server.Properties
+    copy: src=/Users/yanbinwa/Documents/workspace/springboot/serviceManager/serviceManagerSetup/conf/kafka/kafka_3/server.properties  dest=/opt/kafka_2.11-0.9.0.0/config
+
+  - name: Create log dir 
+    file: path=/root/kafka/log  state=directory  mode=0755
+
+  - name: Start kafka
+    command: /opt/kafka_2.11-0.9.0.0/bin/kafka-server-start.sh  /opt/kafka_2.11-0.9.0.0/config/server.properties &

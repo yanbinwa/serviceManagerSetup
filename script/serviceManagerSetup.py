@@ -4,6 +4,8 @@ import serviceManagerSetupForDocker
 import serviceManagerSetupForZookeeper
 import serviceManagerSetupForOrchestration
 import serviceManagerSetupForCollection
+import serviceManagerSetupForKafka
+
 
 import yaml
 import sys
@@ -17,6 +19,7 @@ DOCKER_CONTAINER_PATH_KEY = "docker_container"
 ZOOKEEPER_KEY = "zookeeper"
 ORCHESTRATION_KEY = "orchestration"
 COLLECTION_KEY = "collection"
+KAFKA_KEY = "kafka"
 
 class serviceManagerSetup:
 
@@ -53,6 +56,9 @@ class serviceManagerSetup:
         
         self.collections = self.components[COLLECTION_KEY]
         serviceManagerSetupForCollection.setupAnsibleCollection(self.rootPath, self.collections)
+        
+        self.kafkas = self.components[KAFKA_KEY]
+        serviceManagerSetupForKafka.setupAnsibleKafka(self.rootPath, self.kafkas)
 
 # Start of the python invocation, the argv is manifest file
 if __name__ == "__main__":

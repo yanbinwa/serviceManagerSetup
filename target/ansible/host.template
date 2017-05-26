@@ -1,3 +1,7 @@
+[kafka_2]
+172.18.0.42 ansible_ssh_user=root ansible_ssh_pass=cisco123 ansible_sudo_pass=cisco123
+[kafka_3]
+172.18.0.43 ansible_ssh_user=root ansible_ssh_pass=cisco123 ansible_sudo_pass=cisco123
 [orchestration_active]
 172.18.0.21 ansible_ssh_user=root ansible_ssh_pass=cisco123 ansible_sudo_pass=cisco123
 [zookeeper_1]
@@ -8,6 +12,8 @@
 172.18.0.13 ansible_ssh_user=root ansible_ssh_pass=cisco123 ansible_sudo_pass=cisco123
 [collection_A]
 172.18.0.31 ansible_ssh_user=root ansible_ssh_pass=cisco123 ansible_sudo_pass=cisco123
+[kafka_1]
+172.18.0.41 ansible_ssh_user=root ansible_ssh_pass=cisco123 ansible_sudo_pass=cisco123
 [collection_C]
 172.18.0.33 ansible_ssh_user=root ansible_ssh_pass=cisco123 ansible_sudo_pass=cisco123
 [collection_B]

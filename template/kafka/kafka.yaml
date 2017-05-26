@@ -1,0 +1,17 @@
+---
+- hosts: $_hostname_
+  user: $_user_
+  sudo: yes
+  tasks:
+
+  - name: Unarchive the kafka install package to remote machine
+    unarchive: src=$_kafkaPackage_  dest=$_kafkaPackageInstallPath_
+
+  - name: Copy kafka server.Properties
+    copy: src=$_kafkaConfSrc_  dest=$_kafkaConfTarget_
+
+  - name: Create log dir 
+    file: path=$_kafkaLogDir_  state=directory  mode=0755
+
+  - name: Start kafka
+    shell: nohup $_kafkaServerScript_  $_kafkaConfFile_ 2>&1 > /dev/null &
