@@ -158,3 +158,30 @@ components:
         dockerImage : ubuntu:v2
         dockerNet : yanbin
         ansibleFile : /target/ansible/collection/collection_C.yaml
+        
+  cache:
+    package : /package/cache/serviceManagerCache-1.0-SNAPSHOT.jar
+    template : /template/cache/cache.yaml
+    setup_dir : /opt
+    devices :
+      cache_A :
+        name : cache_A
+        user : root
+        password : cisco123
+        ip : 172.18.0.51
+        port : 8111
+        command : 'nohup java -Dspring.profiles.active=serviceA -jar /opt/serviceManagerCache-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/cache/cache_A.yaml
+        
+      cache_B :
+        name : cache_B
+        user : root
+        password : cisco123
+        ip : 172.18.0.52
+        port : 8112
+        command : 'nohup java -Dspring.profiles.active=serviceB -jar /opt/serviceManagerCache-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/cache/cache_B.yaml

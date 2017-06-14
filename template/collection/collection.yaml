@@ -4,8 +4,17 @@
   sudo: yes
   tasks:
 
+  - name: Create install path
+    file: path=$_collectionJarInstallPath_  state=directory
+
+  - name: Create log path
+    file: path=$_collectionLogDir_  state=directory
+
   - name: Copy collection jar
     copy: src=$_collectionJarSrc_  dest=$_collectionJarInstallPath_
 
   - name: Start collection service
     shell: $_collectionStartCommand_
+
+  - name: Copy flume conf
+    copy: src=$_collectionFlumeConfSrc_   dest=$_flumeConfPath_

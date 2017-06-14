@@ -4,8 +4,17 @@
   sudo: yes
   tasks:
 
+  - name: Create install path
+    file: path=$_orchestrationJarInstallPath_  state=directory
+
+  - name: Create log path
+    file: path=$_orchestrationLogDir_  state=directory
+
   - name: Copy orchestration jar
     copy: src=$_orchestrationJarSrc_  dest=$_orchestrationJarInstallPath_
 
   - name: Start orchestration service
     shell: $_orchestrationStartCommand_
+
+  - name: Copy flume conf
+    copy: src=$_orchestrationFlumeConfSrc_   dest=$_flumeConfPath_

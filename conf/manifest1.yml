@@ -97,7 +97,8 @@ components:
   orchestration:
     package : /package/orchestration/serviceManagerOrchestration-1.0-SNAPSHOT.jar
     template : /template/orchestration/orchestration.yaml
-    setup_dir : /opt
+    setup_dir : /opt/orchestration
+    logFilePath: /opt/orchestration/log
     devices :
       orchestration_active :
         name : orchestration_active
@@ -105,7 +106,7 @@ components:
         password : cisco123
         ip : 172.18.0.21
         port : 8091
-        command : 'nohup java -Dspring.profiles.active=active -jar /opt/serviceManagerOrchestration-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        command : 'nohup java -Dspring.profiles.active=active -jar /opt/orchestration/serviceManagerOrchestration-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
         dockerImage : ubuntu:v2
         dockerNet : yanbin
         ansibleFile : /target/ansible/orchestration/orchestration_active.yaml
@@ -116,15 +117,24 @@ components:
         password : cisco123
         ip : 172.18.0.22
         port : 8092
-        command : 'nohup java -Dspring.profiles.active=standby -jar /opt/serviceManagerOrchestration-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        command : 'nohup java -Dspring.profiles.active=standby -jar /opt/orchestration/serviceManagerOrchestration-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
         dockerImage : ubuntu:v2
         dockerNet : yanbin
         ansibleFile : /target/ansible/orchestration/orchestration_standby.yaml
+    
+    flume:
+      kafkaBrokerList: '172.18.0.41:9101,172.18.0.42:9102,172.18.0.43:9103'
+      kafkaTopic: logging
+      flumeConfTargetRootPath: /target/flume/orchestration
+      flumeConfTemplate: /template/flume/logAgent.conf.template
+      flumeConfName: log.conf
+      flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
 
   collection:
     package : /package/collection/serviceManagerCollection-1.0-SNAPSHOT.jar
     template : /template/collection/collection.yaml
-    setup_dir : /opt
+    setup_dir : /opt/collection
+    logFilePath: /opt/collection/log
     devices :
       collection_A :
         name : collection_A
@@ -132,7 +142,7 @@ components:
         password : cisco123
         ip : 172.18.0.31
         port : 8101
-        command : 'nohup java -Dspring.profiles.active=serviceA -jar /opt/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        command : 'nohup java -Dspring.profiles.active=serviceA -jar /opt/collection/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
         dockerImage : ubuntu:v2
         dockerNet : yanbin
         ansibleFile : /target/ansible/collection/collection_A.yaml
@@ -143,7 +153,7 @@ components:
         password : cisco123
         ip : 172.18.0.32
         port : 8102
-        command : 'nohup java -Dspring.profiles.active=serviceB -jar /opt/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        command : 'nohup java -Dspring.profiles.active=serviceB -jar /opt/collection/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
         dockerImage : ubuntu:v2
         dockerNet : yanbin
         ansibleFile : /target/ansible/collection/collection_B.yaml
@@ -154,7 +164,90 @@ components:
         password : cisco123
         ip : 172.18.0.33
         port : 8103
-        command : 'nohup java -Dspring.profiles.active=serviceC -jar /opt/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        command : 'nohup java -Dspring.profiles.active=serviceC -jar /opt/collection/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
         dockerImage : ubuntu:v2
         dockerNet : yanbin
         ansibleFile : /target/ansible/collection/collection_C.yaml
+    
+    flume:
+      kafkaBrokerList: '172.18.0.41:9101,172.18.0.42:9102,172.18.0.43:9103'
+      kafkaTopic: logging
+      flumeConfTargetRootPath: /target/flume/collection
+      flumeConfTemplate: /template/flume/logAgent.conf.template
+      flumeConfName: log.conf
+      flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
+        
+  cache:
+    package : /package/cache/serviceManagerCache-1.0-SNAPSHOT.jar
+    template : /template/cache/cache.yaml
+    setup_dir : /opt/cache
+    logFilePath: /opt/cache/log
+    devices :
+      cache_A :
+        name : cache_A
+        user : root
+        password : cisco123
+        ip : 172.18.0.51
+        port : 8111
+        command : 'nohup java -Dspring.profiles.active=serviceA -jar /opt/cache/serviceManagerCache-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/cache/cache_A.yaml
+        
+      cache_B :
+        name : cache_B
+        user : root
+        password : cisco123
+        ip : 172.18.0.52
+        port : 8112
+        command : 'nohup java -Dspring.profiles.active=serviceB -jar /opt/cache/serviceManagerCache-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/cache/cache_B.yaml
+    
+    flume:
+      kafkaBrokerList: '172.18.0.41:9101,172.18.0.42:9102,172.18.0.43:9103'
+      kafkaTopic: logging
+      flumeConfTargetRootPath: /target/flume/cache
+      flumeConfTemplate: /template/flume/logAgent.conf.template
+      flumeConfName: log.conf
+      flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
+
+        
+  logging:
+    template: /template/logging/logging.yaml
+    devices:
+      logging :
+        name : logging
+        user : root
+        password : cisco123
+        ip : 172.18.0.61
+        port : 8121
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/logging/logging.yaml
+    flume:
+        kafkaBrokerList: '172.18.0.41:9101,172.18.0.42:9102,172.18.0.43:9103'
+        kafkaTopic: logging
+        flumeConfTargetRootPath: /target/flume/logging
+        flumeConfTemplate: /template/flume/logAgg.conf.template
+        flumeConfName: log.conf
+        flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
+        logFileRootPath: /opt/logging
+        
+commons:
+  flume:
+    serviceGroup: 'orchestration,collection,cache,logging'
+    name: flume
+    user: root
+    preStep:
+      package: /package/flume/apache-flume-1.7.0-bin.tar.gz
+      setup_dir : /opt
+      template: /template/flume/flume_install.yaml
+      ansibleFile: /target/ansible/flume/flume_install.yaml
+    postStep: 
+      template: /template/flume/flume_start.yaml
+      ansibleFile: /target/ansible/flume/flume_start.yaml
+      serverScript: /opt/apache-flume-1.7.0-bin/bin/flume-ng
+      confDir: /opt/apache-flume-1.7.0-bin/conf
+      confName: log.conf

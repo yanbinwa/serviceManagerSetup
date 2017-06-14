@@ -10,7 +10,45 @@ KAFKA_KEY = "kafka"
 ANSIBLE_HEAD_WORD = "---"
 ANSBILE_INCLUDE_WORD = "- include: "
 
-def setupAnsibleMain(rootPath, ansibleMainPath, components):
+COMMON_PRE_STEP_KEY = "preStep"
+COMMON_POST_STEP_KEY = "postStep"
+COMMON_ANSIBLE_FILE = "ansibleFile"
+
+def setupAnsibleMain(rootPath, ansibleMainPath, components, commons):
+    
+    buildAnsibleMainFileHeader(ansibleMainPath)
+    setupAnsibleCommonsPreStep(rootPath, ansibleMainPath, commons)
+    setupAnsibleComponents(rootPath, ansibleMainPath, components)
+    setupAnsibleCommonsPostStep(rootPath, ansibleMainPath, commons)
+    
+def setupAnsibleCommonsPreStep(rootPath, ansibleMainPath, commons):
+    
+    if commons == None:
+        print "No common service, just return"
+        return
+    
+    ansible_file_map = {}
+    
+    for commonServiceKey in commons.keys():
+        commonService = commons[commonServiceKey]
+        if commonService == None:
+            print "commonService should not be null " + commonServiceKey
+            continue
+        
+        if not commonService.has_key(COMMON_PRE_STEP_KEY):
+            print "service do not contain the pre step " + commonServiceKey
+            continue
+        
+        preStep = commonService[COMMON_PRE_STEP_KEY]
+        if preStep == None:
+            print "preStep should not be null"
+            continue
+        
+        ansible_file_map[commonServiceKey] = rootPath + preStep[COMMON_ANSIBLE_FILE]
+        
+    buildAnsibleMainFile(ansibleMainPath, ansible_file_map)
+    
+def setupAnsibleComponents(rootPath, ansibleMainPath, components):
     if components == None:
         print "The components map should not be Null"
         return -1
@@ -47,10 +85,36 @@ def setupAnsibleMain(rootPath, ansibleMainPath, components):
             ansbileFilePath = rootPath + host[ANSIBLE_COMPONENT_FILE]
             ansible_file_map[hostKey] = ansbileFilePath
     
-    buildAnsibleMainFileHeader(ansibleMainPath)
     buildAnsibleMainFile(ansibleMainPath, zookeeper_ansible_file_map)
     buildAnsibleMainFile(ansibleMainPath, kafka_ansible_file_map)
     buildAnsibleMainFile(ansibleMainPath, other_file_map)
+
+def setupAnsibleCommonsPostStep(rootPath, ansibleMainPath, commons):
+
+    if commons == None:
+        print "No common service, just return"
+        return
+    
+    ansible_file_map = {}
+    
+    for commonServiceKey in commons.keys():
+        commonService = commons[commonServiceKey]
+        if commonService == None:
+            print "commonService should not be null " + commonServiceKey
+            continue
+        
+        if not commonService.has_key(COMMON_POST_STEP_KEY):
+            print "service do not contain the post step " + commonServiceKey
+            continue
+        
+        postStep = commonService[COMMON_POST_STEP_KEY]
+        if postStep == None:
+            print "postStep should not be null"
+            continue
+        
+        ansible_file_map[commonServiceKey] = rootPath + postStep[COMMON_ANSIBLE_FILE]
+        
+    buildAnsibleMainFile(ansibleMainPath, ansible_file_map)
 
 def buildAnsibleMainFileHeader(ansibleMainPath):
     if os.path.exists(ansibleMainPath):

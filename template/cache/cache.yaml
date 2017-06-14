@@ -1,0 +1,20 @@
+---
+- hosts: $_hostname_
+  user: $_user_
+  sudo: yes
+  tasks:
+
+  - name: Create install path
+    file: path=$_cacheJarInstallPath_  state=directory
+
+  - name: Create log path
+    file: path=$_cacheLogDir_  state=directory
+
+  - name: Copy cache jar
+    copy: src=$_cacheJarSrc_  dest=$_cacheJarInstallPath_
+
+  - name: Start cache service
+    shell: $_cacheStartCommand_
+
+  - name: Copy flume conf
+    copy: src=$_cacheFlumeConfSrc_   dest=$_flumeConfPath_

@@ -1,0 +1,8 @@
+---
+- hosts: $_hostname_
+  user: $_user_
+  sudo: yes
+  tasks:
+  
+  - name: Unarchive the flume install package to remote machine
+    unarchive: src=$_flumePackage_ dest=$_flumePackageInstallPath_

@@ -1,0 +1,11 @@
+---
+- hosts: $_hostname_
+  user: $_user_
+  sudo: yes
+  tasks:
+
+  - name: Create logging root path
+    file: path=$_loggingRootPath_  state=directory
+
+  - name: Copy flume conf
+    copy: src=$_loggingFlumeConfSrc_   dest=$_flumeConfPath_
