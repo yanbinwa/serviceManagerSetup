@@ -5,4 +5,4 @@
   tasks:
 
   - name: Start flume
-    shell: nohup $_flumeScript_  agent -c  $_flumeConfDir_  -f  $_flumeConfDir_/$_flumeConfName_  -n agent-1 2>&1 > /dev/null &
+    shell: nohup $_flumeScript_  agent -c  $_flumeConfDir_  -f  $_flumeConfDir_/$_flumeConfName_  -Dflume.root.logger=DEBUG,LOGFILE -n agent-1 2>&1 > /dev/null &

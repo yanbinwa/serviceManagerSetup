@@ -47,9 +47,15 @@ def setupAnsibleHost(ansibleHostPath, components, commons):
     setupAnsibleCommonHost(ansibleHostPath, components, commons, host_map)
     
 def buildAnsibleHost(ansibleHostPath, host_map):
+   
+    ansibleHostDir = ansibleHostPath[:ansibleHostPath.rindex("/")]
+    
+    if not os.path.exists(ansibleHostDir):
+        os.makedirs(ansibleHostDir)
+    
     if os.path.exists(ansibleHostPath):
         os.remove(ansibleHostPath)
-    
+        
     ansibleHostFile = os.open(ansibleHostPath, os.O_CREAT|os.O_RDWR)
     for hostKey in host_map.keys():
         hostHeader = "[" + hostKey + "]" + "\n"

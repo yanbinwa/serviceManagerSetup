@@ -7,6 +7,7 @@ COLLECTION_PACKAGE_KEY = "package"
 COLLECTION_TEMPLATE_KEY = "template"
 COLLECTION_INSTALL_PATH_KEY = "setup_dir"
 COLLECTION_LOG_PATH_KEY = "logFilePath"
+COLLECTION_LOG_FILES_KEY = "logFiles"
 COLLECTION_FLUME_INFO_KEY = "flume"
 
 COLLECTION_NAME_KEY = "name"
@@ -28,8 +29,11 @@ FLUME_CONF_TARGET_ROOT_PATH_KEY = "flumeConfTargetRootPath"
 FLUME_CONF_INSTALL_PATH_KEY = "flumeConfInstallPath"
 FLUME_CONF_FILE_NAME_KEY = "flumeConfName"
 FLUME_CONF_TEMPLATE_KEY = "flumeConfTemplate"
+FLUME_CONF_SRC_TEMPLATE_KEY = "flumeConfSrcTemplate"
 FLUME_KAFKA_BROKER_LIST_KEY = "kafkaBrokerList"
 FLUME_KAFKA_LOGGING_TOPIC_KEY = "kafkaTopic"
+FLUME_KAFKA_PARTITION_KEY_KEY = "kafkaPartitionKey"
+FLUME_KAFKA_PARTITION_ID_KEY = "kafkaPartitionId"
 
 def setupAnsibleCollection(rootPath, collections):
     if collections == None:
@@ -75,6 +79,7 @@ def setupAnsibleCollection(rootPath, collections):
         collection_ansible_map[deviceKey] = collection_ansible_info
     
     buildAnsibleCollection(collection_template_file, collection_ansible_map)
+    flume_info_map[COLLECTION_LOG_FILES_KEY] = collections[COLLECTION_LOG_FILES_KEY]
     buildFlumeConf(rootPath, flume_info_map, collection_ansible_map)
         
 def buildAnsibleCollection(collection_template_file, collection_ansible_map):
@@ -99,6 +104,11 @@ def buildAnsibleCollection(collection_template_file, collection_ansible_map):
         tempTemplate = tempTemplate.replace(COLLECTION_LOG_DIR_WORD, collectionAnsibleInfo[COLLECTION_LOG_DIR_WORD])
         
         collectionAnsibleFile = collectionAnsibleInfo[COLLECTION_ANSIBLE_FILE_PATH]
+        collectionAnsibleFileDir = collectionAnsibleFile[:collectionAnsibleFile.rindex("/")]
+    
+        if not os.path.exists(collectionAnsibleFileDir):
+            os.makedirs(collectionAnsibleFileDir)
+        
         if os.path.exists(collectionAnsibleFile):
             os.remove(collectionAnsibleFile)
             
@@ -107,7 +117,6 @@ def buildAnsibleCollection(collection_template_file, collection_ansible_map):
         os.close(collectionAnsibleFileScript)
         
 def buildFlumeConf(rootPath, flume_info_map, collection_ansible_map):
-    flume_Conf_Template_file = rootPath + flume_info_map[FLUME_CONF_TEMPLATE_KEY]
     
     for collectionAnsibleInfoKey in collection_ansible_map.keys():
         collectionAnsibleInfo = collection_ansible_map[collectionAnsibleInfoKey]
@@ -118,9 +127,14 @@ def buildFlumeConf(rootPath, flume_info_map, collection_ansible_map):
         flume_conf_info = {}
         flume_conf_info[serviceManagerSetupLogAgentConf.KAFKA_BROKER_LIST_WORD] = flume_info_map[FLUME_KAFKA_BROKER_LIST_KEY]
         flume_conf_info[serviceManagerSetupLogAgentConf.KAFKA_LOGGING_TOPIC_WORD] = flume_info_map[FLUME_KAFKA_LOGGING_TOPIC_KEY]
-        flume_conf_info[serviceManagerSetupLogAgentConf.SERVICE_GROUP_NAME_WORD] = 'cache'
+        flume_conf_info[serviceManagerSetupLogAgentConf.KAFKA_PARTITION_ID_WORD] = flume_info_map[FLUME_KAFKA_PARTITION_ID_KEY]
+        flume_conf_info[serviceManagerSetupLogAgentConf.SERVICE_GROUP_NAME_WORD] = 'collection'
+        flume_conf_info[serviceManagerSetupLogAgentConf.LOG_FILE_LIST_STRING_KEY] = flume_info_map[COLLECTION_LOG_FILES_KEY]
+        flume_conf_info[serviceManagerSetupLogAgentConf.FLUME_CONF_TEMPLATE_KEY] = rootPath + flume_info_map[FLUME_CONF_TEMPLATE_KEY]
+        flume_conf_info[serviceManagerSetupLogAgentConf.FLUME_CONF_SRC_TEMPLATE_KEY] = rootPath + flume_info_map[FLUME_CONF_SRC_TEMPLATE_KEY]
+        
+        flume_conf_info[serviceManagerSetupLogAgentConf.LOG_FILE_PATH_WORD] = collectionAnsibleInfo[COLLECTION_LOG_DIR_WORD]
         flume_conf_info[serviceManagerSetupLogAgentConf.SERVICE_NAME_WORD] = collectionAnsibleInfo[COLLECTION_HOST_NAME_WORD]
         flume_conf_info[serviceManagerSetupLogAgentConf.FLUME_CONF_TARGET_PATH_KEY] = collectionAnsibleInfo[COLLECTION_FLUME_CONF_SRC_WORD]
-        flume_conf_info[serviceManagerSetupLogAgentConf.LOG_FILE_PATH_WORD] = collectionAnsibleInfo[COLLECTION_LOG_DIR_WORD]
         
-        serviceManagerSetupLogAgentConf.buildFlumeLogAgentConf(flume_Conf_Template_file, flume_conf_info)
+        serviceManagerSetupLogAgentConf.buildFlumeLogAgentConf(flume_conf_info)

@@ -7,6 +7,7 @@ CACHE_PACKAGE_KEY = "package"
 CACHE_TEMPLATE_KEY = "template"
 CACHE_INSTALL_PATH_KEY = "setup_dir"
 CACHE_LOG_PATH_KEY = "logFilePath"
+CACHE_LOG_FILES_KEY = "logFiles"
 CACHE_FLUME_INFO_KEY = "flume"
 
 CACHE_NAME_KEY = "name"
@@ -28,8 +29,10 @@ FLUME_CONF_TARGET_ROOT_PATH_KEY = "flumeConfTargetRootPath"
 FLUME_CONF_INSTALL_PATH_KEY = "flumeConfInstallPath"
 FLUME_CONF_FILE_NAME_KEY = "flumeConfName"
 FLUME_CONF_TEMPLATE_KEY = "flumeConfTemplate"
+FLUME_CONF_SRC_TEMPLATE_KEY = "flumeConfSrcTemplate"
 FLUME_KAFKA_BROKER_LIST_KEY = "kafkaBrokerList"
 FLUME_KAFKA_LOGGING_TOPIC_KEY = "kafkaTopic"
+FLUME_KAFKA_PARTITION_ID_KEY = "kafkaPartitionId"
 
 def setupAnsibleCache(rootPath, caches):
     if caches == None:
@@ -76,6 +79,8 @@ def setupAnsibleCache(rootPath, caches):
         cache_ansible_map[deviceKey] = cache_ansible_info
     
     buildAnsibleCache(cache_template_file, cache_ansible_map)
+    
+    flume_info_map[CACHE_LOG_FILES_KEY] = caches[CACHE_LOG_FILES_KEY]
     buildFlumeConf(rootPath, flume_info_map, cache_ansible_map)
         
 def buildAnsibleCache(cache_template_file, cache_ansible_map):
@@ -100,6 +105,11 @@ def buildAnsibleCache(cache_template_file, cache_ansible_map):
         tempTemplate = tempTemplate.replace(CACHE_LOG_DIR_WORD, cacheAnsibleInfo[CACHE_LOG_DIR_WORD])
         
         cacheAnsibleFile = cacheAnsibleInfo[CACHE_ANSIBLE_FILE_PATH]
+        cacheAnsibleFileDir = cacheAnsibleFile[:cacheAnsibleFile.rindex("/")]
+    
+        if not os.path.exists(cacheAnsibleFileDir):
+            os.makedirs(cacheAnsibleFileDir)
+        
         if os.path.exists(cacheAnsibleFile):
             os.remove(cacheAnsibleFile)
             
@@ -108,7 +118,6 @@ def buildAnsibleCache(cache_template_file, cache_ansible_map):
         os.close(cacheAnsibleFileScript)
 
 def buildFlumeConf(rootPath, flume_info_map, cache_ansible_map):
-    flume_Conf_Template_file = rootPath + flume_info_map[FLUME_CONF_TEMPLATE_KEY]
     
     for cacheAnsibleInfoKey in cache_ansible_map.keys():
         cacheAnsibleInfo = cache_ansible_map[cacheAnsibleInfoKey]
@@ -119,9 +128,14 @@ def buildFlumeConf(rootPath, flume_info_map, cache_ansible_map):
         flume_conf_info = {}
         flume_conf_info[serviceManagerSetupLogAgentConf.KAFKA_BROKER_LIST_WORD] = flume_info_map[FLUME_KAFKA_BROKER_LIST_KEY]
         flume_conf_info[serviceManagerSetupLogAgentConf.KAFKA_LOGGING_TOPIC_WORD] = flume_info_map[FLUME_KAFKA_LOGGING_TOPIC_KEY]
+        flume_conf_info[serviceManagerSetupLogAgentConf.KAFKA_PARTITION_ID_WORD] = flume_info_map[FLUME_KAFKA_PARTITION_ID_KEY]
         flume_conf_info[serviceManagerSetupLogAgentConf.SERVICE_GROUP_NAME_WORD] = 'cache'
-        flume_conf_info[serviceManagerSetupLogAgentConf.SERVICE_NAME_WORD] = cacheAnsibleInfo[CACHE_HOST_NAME_WORD]
-        flume_conf_info[serviceManagerSetupLogAgentConf.FLUME_CONF_TARGET_PATH_KEY] = cacheAnsibleInfo[CACHE_FLUME_CONF_SRC_WORD]
-        flume_conf_info[serviceManagerSetupLogAgentConf.LOG_FILE_PATH_WORD] = cacheAnsibleInfo[CACHE_LOG_DIR_WORD]
+        flume_conf_info[serviceManagerSetupLogAgentConf.LOG_FILE_LIST_STRING_KEY] = flume_info_map[CACHE_LOG_FILES_KEY]
+        flume_conf_info[serviceManagerSetupLogAgentConf.FLUME_CONF_TEMPLATE_KEY] = rootPath + flume_info_map[FLUME_CONF_TEMPLATE_KEY]
+        flume_conf_info[serviceManagerSetupLogAgentConf.FLUME_CONF_SRC_TEMPLATE_KEY] = rootPath + flume_info_map[FLUME_CONF_SRC_TEMPLATE_KEY]
         
-        serviceManagerSetupLogAgentConf.buildFlumeLogAgentConf(flume_Conf_Template_file, flume_conf_info)
+        flume_conf_info[serviceManagerSetupLogAgentConf.SERVICE_NAME_WORD] = cacheAnsibleInfo[CACHE_HOST_NAME_WORD]
+        flume_conf_info[serviceManagerSetupLogAgentConf.LOG_FILE_PATH_WORD] = cacheAnsibleInfo[CACHE_LOG_DIR_WORD]
+        flume_conf_info[serviceManagerSetupLogAgentConf.FLUME_CONF_TARGET_PATH_KEY] = cacheAnsibleInfo[CACHE_FLUME_CONF_SRC_WORD]
+        
+        serviceManagerSetupLogAgentConf.buildFlumeLogAgentConf(flume_conf_info)

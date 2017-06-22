@@ -7,6 +7,7 @@ ORCHESTRATION_PACKAGE_KEY = "package"
 ORCHESTRATION_TEMPLATE_KEY = "template"
 ORCHESTRATION_INSTALL_PATH_KEY = "setup_dir"
 ORCHESTRATION_LOG_PATH_KEY = "logFilePath"
+ORCHESTRATION_LOG_FILES_KEY = "logFiles"
 ORCHESTRATION_FLUME_INFO_KEY = "flume"
 
 ORCHESTRATION_NAME_KEY = "name"
@@ -28,8 +29,10 @@ FLUME_CONF_TARGET_ROOT_PATH_KEY = "flumeConfTargetRootPath"
 FLUME_CONF_INSTALL_PATH_KEY = "flumeConfInstallPath"
 FLUME_CONF_FILE_NAME_KEY = "flumeConfName"
 FLUME_CONF_TEMPLATE_KEY = "flumeConfTemplate"
+FLUME_CONF_SRC_TEMPLATE_KEY = "flumeConfSrcTemplate"
 FLUME_KAFKA_BROKER_LIST_KEY = "kafkaBrokerList"
 FLUME_KAFKA_LOGGING_TOPIC_KEY = "kafkaTopic"
+FLUME_KAFKA_PARTITION_ID_KEY = "kafkaPartitionId"
 
 def setupAnsibleOrchestration(rootPath, orchestrations):
     if orchestrations == None:
@@ -74,6 +77,9 @@ def setupAnsibleOrchestration(rootPath, orchestrations):
         orchestration_ansible_map[deviceKey] = orchestration_ansible_info
         
     buildAnsibleOrchestration(orchestration_template_file, orchestration_ansible_map)
+    
+    # Add the log file string list to flume_info_map
+    flume_info_map[ORCHESTRATION_LOG_FILES_KEY] = orchestrations[ORCHESTRATION_LOG_FILES_KEY]
     buildFlumeConf(rootPath, flume_info_map, orchestration_ansible_map)
         
 def buildAnsibleOrchestration(orchestration_template_file, orchestration_ansible_map):
@@ -98,6 +104,11 @@ def buildAnsibleOrchestration(orchestration_template_file, orchestration_ansible
         tempTemplate = tempTemplate.replace(ORCHESTRATION_LOG_DIR_WORD, orchestrationAnsibleInfo[ORCHESTRATION_LOG_DIR_WORD])
         
         orchestrationAnsibleFile = orchestrationAnsibleInfo[ORCHESTRATION_ANSIBLE_FILE_PATH]
+        orchestrationAnsibleFileDir = orchestrationAnsibleFile[:orchestrationAnsibleFile.rindex("/")]
+    
+        if not os.path.exists(orchestrationAnsibleFileDir):
+            os.makedirs(orchestrationAnsibleFileDir)
+        
         if os.path.exists(orchestrationAnsibleFile):
             os.remove(orchestrationAnsibleFile)
             
@@ -106,7 +117,6 @@ def buildAnsibleOrchestration(orchestration_template_file, orchestration_ansible
         os.close(orchestrationAnsibleFileScript)
         
 def buildFlumeConf(rootPath, flume_info_map, orchestration_ansible_map):
-    flume_Conf_Template_file = rootPath + flume_info_map[FLUME_CONF_TEMPLATE_KEY]
     
     for orchestrationAnsibleInfoKey in orchestration_ansible_map.keys():
         orchestrationAnsibleInfo = orchestration_ansible_map[orchestrationAnsibleInfoKey]
@@ -117,9 +127,14 @@ def buildFlumeConf(rootPath, flume_info_map, orchestration_ansible_map):
         flume_conf_info = {}
         flume_conf_info[serviceManagerSetupLogAgentConf.KAFKA_BROKER_LIST_WORD] = flume_info_map[FLUME_KAFKA_BROKER_LIST_KEY]
         flume_conf_info[serviceManagerSetupLogAgentConf.KAFKA_LOGGING_TOPIC_WORD] = flume_info_map[FLUME_KAFKA_LOGGING_TOPIC_KEY]
-        flume_conf_info[serviceManagerSetupLogAgentConf.SERVICE_GROUP_NAME_WORD] = 'cache'
+        flume_conf_info[serviceManagerSetupLogAgentConf.KAFKA_PARTITION_ID_WORD] = flume_info_map[FLUME_KAFKA_PARTITION_ID_KEY]
+        flume_conf_info[serviceManagerSetupLogAgentConf.SERVICE_GROUP_NAME_WORD] = 'orchestration'
+        flume_conf_info[serviceManagerSetupLogAgentConf.LOG_FILE_LIST_STRING_KEY] = flume_info_map[ORCHESTRATION_LOG_FILES_KEY]
+        flume_conf_info[serviceManagerSetupLogAgentConf.FLUME_CONF_TEMPLATE_KEY] = rootPath + flume_info_map[FLUME_CONF_TEMPLATE_KEY]
+        flume_conf_info[serviceManagerSetupLogAgentConf.FLUME_CONF_SRC_TEMPLATE_KEY] = rootPath + flume_info_map[FLUME_CONF_SRC_TEMPLATE_KEY]
+        
+        flume_conf_info[serviceManagerSetupLogAgentConf.LOG_FILE_PATH_WORD] = orchestrationAnsibleInfo[ORCHESTRATION_LOG_DIR_WORD]
         flume_conf_info[serviceManagerSetupLogAgentConf.SERVICE_NAME_WORD] = orchestrationAnsibleInfo[ORCHESTRATION_HOST_NAME_WORD]
         flume_conf_info[serviceManagerSetupLogAgentConf.FLUME_CONF_TARGET_PATH_KEY] = orchestrationAnsibleInfo[ORCHESTRATION_FLUME_CONF_SRC_WORD]
-        flume_conf_info[serviceManagerSetupLogAgentConf.LOG_FILE_PATH_WORD] = orchestrationAnsibleInfo[ORCHESTRATION_LOG_DIR_WORD]
         
-        serviceManagerSetupLogAgentConf.buildFlumeLogAgentConf(flume_Conf_Template_file, flume_conf_info)
+        serviceManagerSetupLogAgentConf.buildFlumeLogAgentConf(flume_conf_info)

@@ -42,6 +42,12 @@ def setupDockerContainer(dockerContainerFile, components):
     
     
 def buildDockerContainerScript(dockerContainerFile, docker_container_map):
+    
+    dockerContainerFileDir = dockerContainerFile[:dockerContainerFile.rindex("/")]
+    
+    if not os.path.exists(dockerContainerFileDir):
+        os.makedirs(dockerContainerFileDir)
+    
     if os.path.exists(dockerContainerFile):
         os.remove(dockerContainerFile)
     

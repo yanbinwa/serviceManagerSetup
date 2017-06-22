@@ -93,6 +93,12 @@ def buildAnsibleZookeeper(zookeeper_template_file, zookeeper_ansible_map):
         tempTemplate = tempTemplate.replace(ZOOKEEPER_SERVER_SCRPIT_WORD, zookeeperAnsibleInfo[ZOOKEEPER_SERVER_SCRPIT_WORD])
         
         zookeeperAnsibleFile = zookeeperAnsibleInfo[ZOOKEEPER_ANSIBLE_FILE_PATH]
+        
+        zookeeperAnsibleFileDir = zookeeperAnsibleFile[:zookeeperAnsibleFile.rindex("/")]
+    
+        if not os.path.exists(zookeeperAnsibleFileDir):
+            os.makedirs(zookeeperAnsibleFileDir)
+        
         if os.path.exists(zookeeperAnsibleFile):
             os.remove(zookeeperAnsibleFile)
             

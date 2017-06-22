@@ -84,6 +84,11 @@ def buildAnsibleLogging(logging_template_file, logging_ansible_map):
         tempTemplate = tempTemplate.replace(LOGGING_FLUME_CONF_DES_WORD, loggingAnsibleInfo[LOGGING_FLUME_CONF_DES_WORD])
         
         loggingAnsibleFile = loggingAnsibleInfo[LOGGING_ANSIBLE_FILE_PATH]
+        loggingAnsibleFileDir = loggingAnsibleFile[:loggingAnsibleFile.rindex("/")]
+    
+        if not os.path.exists(loggingAnsibleFileDir):
+            os.makedirs(loggingAnsibleFileDir)
+        
         if os.path.exists(loggingAnsibleFile):
             os.remove(loggingAnsibleFile)
             

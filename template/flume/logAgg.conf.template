@@ -3,10 +3,12 @@ agent-1.channels = ch-1
 agent-1.sinks = sink-1
 
 agent-1.channels.ch-1.type = memory
+agent-1.channels.ch-1.capacity = 10000
+agent-1.channels.ch-1.transactionCapacity = 1000
 
 agent-1.sources.src-1.channels = ch-1
 agent-1.sources.src-1.type = org.apache.flume.source.kafka.KafkaSource
-agent-1.sources.src-1.batchSize = 200
+agent-1.sources.src-1.batchSize = 1000
 agent-1.sources.src-1.batchDurationMillis = 2000
 agent-1.sources.src-1.kafka.bootstrap.servers = $_kafkaBrokerList_
 agent-1.sources.src-1.kafka.topics = $_kafkaTopic_

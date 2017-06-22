@@ -99,6 +99,7 @@ components:
     template : /template/orchestration/orchestration.yaml
     setup_dir : /opt/orchestration
     logFilePath: /opt/orchestration/log
+    logFiles: 'message,console'
     devices :
       orchestration_active :
         name : orchestration_active
@@ -125,16 +126,19 @@ components:
     flume:
       kafkaBrokerList: '172.18.0.41:9101,172.18.0.42:9102,172.18.0.43:9103'
       kafkaTopic: logging
+      kafkaPartitionId: 0
+      flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
       flumeConfTargetRootPath: /target/flume/orchestration
       flumeConfTemplate: /template/flume/logAgent.conf.template
+      flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
       flumeConfName: log.conf
-      flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
 
   collection:
     package : /package/collection/serviceManagerCollection-1.0-SNAPSHOT.jar
     template : /template/collection/collection.yaml
     setup_dir : /opt/collection
     logFilePath: /opt/collection/log
+    logFiles: 'message,console'
     devices :
       collection_A :
         name : collection_A
@@ -172,16 +176,19 @@ components:
     flume:
       kafkaBrokerList: '172.18.0.41:9101,172.18.0.42:9102,172.18.0.43:9103'
       kafkaTopic: logging
+      kafkaPartitionId: 1
+      flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
       flumeConfTargetRootPath: /target/flume/collection
       flumeConfTemplate: /template/flume/logAgent.conf.template
+      flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
       flumeConfName: log.conf
-      flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
         
   cache:
     package : /package/cache/serviceManagerCache-1.0-SNAPSHOT.jar
     template : /template/cache/cache.yaml
     setup_dir : /opt/cache
     logFilePath: /opt/cache/log
+    logFiles: 'message,console'
     devices :
       cache_A :
         name : cache_A
@@ -208,11 +215,12 @@ components:
     flume:
       kafkaBrokerList: '172.18.0.41:9101,172.18.0.42:9102,172.18.0.43:9103'
       kafkaTopic: logging
+      kafkaPartitionId: 2
+      flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
       flumeConfTargetRootPath: /target/flume/cache
       flumeConfTemplate: /template/flume/logAgent.conf.template
+      flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
       flumeConfName: log.conf
-      flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
-
         
   logging:
     template: /template/logging/logging.yaml

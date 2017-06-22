@@ -3,39 +3,16 @@ agent-1.channels = ch-1
 agent-1.sinks = sink-1
 
 agent-1.channels.ch-1.type = memory
+agent-1.channels.ch-1.capacity = 10000
+agent-1.channels.ch-1.transactionCapacity = 1000
 
-agent-1.sources.src-1.type = exec
-agent-1.sources.src-1.channels = ch-1
-agent-1.sources.src-1.command = tail -f $_logFilePath_/message.txt
-agent-1.sources.src-1.interceptors = interceptor-1 interceptor-2 interceptor-3
-agent-1.sources.src-1.interceptors.interceptor-1.type = static
-agent-1.sources.src-1.interceptors.interceptor-1.key = serviceGroupName
-agent-1.sources.src-1.interceptors.interceptor-1.value = $_serviceGroupName_
-agent-1.sources.src-1.interceptors.interceptor-2.type = static
-agent-1.sources.src-1.interceptors.interceptor-2.key = serviceName
-agent-1.sources.src-1.interceptors.interceptor-2.value = $_serviceName_
-agent-1.sources.src-1.interceptors.interceptor-3.type = static
-agent-1.sources.src-1.interceptors.interceptor-3.key = logFileName
-agent-1.sources.src-1.interceptors.interceptor-3.value = message
-
-agent-1.sources.src-2.type = exec
-agent-1.sources.src-2.channels = ch-1
-agent-1.sources.src-2.command = tail -f $_logFilePath_/console.txt
-agent-1.sources.src-2.interceptors = interceptor-4 interceptor-5 interceptor-6
-agent-1.sources.src-2.interceptors.interceptor-4.type = static
-agent-1.sources.src-2.interceptors.interceptor-4.key = serviceGroupName
-agent-1.sources.src-2.interceptors.interceptor-4.value = $_serviceGroupName_
-agent-1.sources.src-2.interceptors.interceptor-5.type = static
-agent-1.sources.src-2.interceptors.interceptor-5.key = serviceName
-agent-1.sources.src-2.interceptors.interceptor-5.value = $_serviceName_
-agent-1.sources.src-2.interceptors.interceptor-6.type = static
-agent-1.sources.src-2.interceptors.interceptor-6.key = logFileName
-agent-1.sources.src-2.interceptors.interceptor-6.value = console
+$_agentSrc_
 
 agent-1.sinks.sink-1.channel = ch-1
 agent-1.sinks.sink-1.type = org.apache.flume.sink.kafka.KafkaSink
 agent-1.sinks.sink-1.topic = $_kafkaTopic_
 agent-1.sinks.sink-1.brokerList = $_kafkaBrokerList_
 agent-1.sinks.sink-1.requiredAcks = 1
-agent-1.sinks.sink-1.batchSize = 200
+agent-1.sinks.sink-1.batchSize = 1000
 agent-1.sinks.sink-1.useFlumeEventFormat = true
+agent-1.sinks.sink-1.defaultPartitionId = $_kafkaPartitionId_

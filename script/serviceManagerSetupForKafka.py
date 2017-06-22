@@ -89,6 +89,11 @@ def buildAnsibleKafka(kafka_template_file, kafka_ansible_map):
         tempTemplate = tempTemplate.replace(KAFKA_SERVER_SCRPIT_WORD, kafkaAnsibleInfo[KAFKA_SERVER_SCRPIT_WORD])
         
         kafkaAnsibleFile = kafkaAnsibleInfo[KAFKA_ANSIBLE_FILE_PATH]
+        kafkaAnsibleFileDir = kafkaAnsibleFile[:kafkaAnsibleFile.rindex("/")]
+    
+        if not os.path.exists(kafkaAnsibleFileDir):
+            os.makedirs(kafkaAnsibleFileDir)
+        
         if os.path.exists(kafkaAnsibleFile):
             os.remove(kafkaAnsibleFile)
             
