@@ -1,0 +1,19 @@
+---
+- hosts: $_hostname_
+  user: $_user_
+  sudo: yes
+  tasks:
+
+  - name: Unarchive the redis install package to remote machine
+    unarchive: src=$_redisPackage_  dest=$_redisPackageInstallPath_
+
+  - name: Make and make install redis
+    shell: cd $_redisMakePath_ && make && make install
+
+  - name: Copy redis conf redis.conf
+    copy: src=$_redisConfSrc_  dest=$_redisConfTarget_
+
+  - name: Start redis service
+    shell: $_redisServerScript_
+
+

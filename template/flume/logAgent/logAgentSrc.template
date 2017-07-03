@@ -1,0 +1,13 @@
+agent-1.sources.src-$_srcIndex_.type = exec
+agent-1.sources.src-$_srcIndex_.channels = ch-1
+agent-1.sources.src-$_srcIndex_.command = tail -F $_logFilePath_/$_logFile_.log -n 500
+agent-1.sources.src-$_srcIndex_.interceptors = interceptor-$_interceptorIndex1_ interceptor-$_interceptorIndex2_ interceptor-$_interceptorIndex3_
+agent-1.sources.src-$_srcIndex_.interceptors.interceptor-$_interceptorIndex1_.type = static
+agent-1.sources.src-$_srcIndex_.interceptors.interceptor-$_interceptorIndex1_.key = serviceGroupName
+agent-1.sources.src-$_srcIndex_.interceptors.interceptor-$_interceptorIndex1_.value = $_serviceGroupName_
+agent-1.sources.src-$_srcIndex_.interceptors.interceptor-$_interceptorIndex2_.type = static
+agent-1.sources.src-$_srcIndex_.interceptors.interceptor-$_interceptorIndex2_.key = serviceName
+agent-1.sources.src-$_srcIndex_.interceptors.interceptor-$_interceptorIndex2_.value = $_serviceName_
+agent-1.sources.src-$_srcIndex_.interceptors.interceptor-$_interceptorIndex3_.type = static
+agent-1.sources.src-$_srcIndex_.interceptors.interceptor-$_interceptorIndex3_.key = logFileName
+agent-1.sources.src-$_srcIndex_.interceptors.interceptor-$_interceptorIndex3_.value = $_logFile_

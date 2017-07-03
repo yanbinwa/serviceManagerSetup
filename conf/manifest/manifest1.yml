@@ -112,16 +112,16 @@ components:
         dockerNet : yanbin
         ansibleFile : /target/ansible/orchestration/orchestration_active.yaml
 
-#      orchestration_standby :
-#        name : orchestration_standby
-#        user : root
-#        password : cisco123
-#        ip : 172.18.0.22
-#        port : 8092
-#        command : 'nohup java -Dspring.profiles.active=standby -jar /opt/orchestration/serviceManagerOrchestration-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
-#        dockerImage : ubuntu:v2
-#        dockerNet : yanbin
-#        ansibleFile : /target/ansible/orchestration/orchestration_standby.yaml
+      orchestration_standby :
+        name : orchestration_standby
+        user : root
+        password : cisco123
+        ip : 172.18.0.22
+        port : 8092
+        command : 'nohup java -Dspring.profiles.active=standby -jar /opt/orchestration/serviceManagerOrchestration-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/orchestration/orchestration_standby.yaml
     
     flume:
       kafkaBrokerList: '172.18.0.41:9101,172.18.0.42:9102,172.18.0.43:9103'
@@ -151,27 +151,27 @@ components:
         dockerNet : yanbin
         ansibleFile : /target/ansible/collection/collection_A.yaml
         
-#      collection_B :
-#        name : collection_B
-#        user : root
-#        password : cisco123
-#        ip : 172.18.0.32
-#        port : 8102
-#        command : 'nohup java -Dspring.profiles.active=serviceB -jar /opt/collection/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
-#        dockerImage : ubuntu:v2
-#        dockerNet : yanbin
-#        ansibleFile : /target/ansible/collection/collection_B.yaml
+      collection_B :
+        name : collection_B
+        user : root
+        password : cisco123
+        ip : 172.18.0.32
+        port : 8102
+        command : 'nohup java -Dspring.profiles.active=serviceB -jar /opt/collection/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/collection/collection_B.yaml
         
-#      collection_C :
-#        name : collection_C
-#        user : root
-#        password : cisco123
-#        ip : 172.18.0.33
-#        port : 8103
-#        command : 'nohup java -Dspring.profiles.active=serviceC -jar /opt/collection/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
-#        dockerImage : ubuntu:v2
-#        dockerNet : yanbin
-#        ansibleFile : /target/ansible/collection/collection_C.yaml
+      collection_C :
+        name : collection_C
+        user : root
+        password : cisco123
+        ip : 172.18.0.33
+        port : 8103
+        command : 'nohup java -Dspring.profiles.active=serviceC -jar /opt/collection/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/collection/collection_C.yaml
     
     flume:
       kafkaBrokerList: '172.18.0.41:9101,172.18.0.42:9102,172.18.0.43:9103'
@@ -201,16 +201,16 @@ components:
         dockerNet : yanbin
         ansibleFile : /target/ansible/cache/cache_A.yaml
         
-#      cache_B :
-#        name : cache_B
-#        user : root
-#        password : cisco123
-#        ip : 172.18.0.52
-#        port : 8112
-#        command : 'nohup java -Dspring.profiles.active=serviceB -jar /opt/cache/serviceManagerCache-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
-#        dockerImage : ubuntu:v2
-#        dockerNet : yanbin
-#        ansibleFile : /target/ansible/cache/cache_B.yaml
+      cache_B :
+        name : cache_B
+        user : root
+        password : cisco123
+        ip : 172.18.0.52
+        port : 8112
+        command : 'nohup java -Dspring.profiles.active=serviceB -jar /opt/cache/serviceManagerCache-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/cache/cache_B.yaml
     
     flume:
       kafkaBrokerList: '172.18.0.41:9101,172.18.0.42:9102,172.18.0.43:9103'

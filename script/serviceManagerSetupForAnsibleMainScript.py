@@ -6,6 +6,7 @@ ANSIBLE_COMPONENT_FILE = "ansibleFile"
 #Base service, should install first
 ZOOKEEPER_KEY = "zookeeper"
 KAFKA_KEY = "kafka"
+REDIS_KEY = "redis"
 
 ANSIBLE_HEAD_WORD = "---"
 ANSBILE_INCLUDE_WORD = "- include: "
@@ -55,6 +56,7 @@ def setupAnsibleComponents(rootPath, ansibleMainPath, components):
     
     zookeeper_ansible_file_map = {}
     kafka_ansible_file_map = {}
+    redis_ansible_file_map = {}
     other_file_map = {}
     for componentKey in components.keys():
         component = components[componentKey]
@@ -65,11 +67,13 @@ def setupAnsibleComponents(rootPath, ansibleMainPath, components):
         ansible_file_map = None
         #Need to write the main.yaml in sort
         if(componentKey == ZOOKEEPER_KEY):
-            ansible_file_map = zookeeper_ansible_file_map;
+            ansible_file_map = zookeeper_ansible_file_map
         elif(componentKey == KAFKA_KEY):
-            ansible_file_map = kafka_ansible_file_map;
+            ansible_file_map = kafka_ansible_file_map
+        elif(componentKey == REDIS_KEY):
+            ansible_file_map = redis_ansible_file_map
         else:
-            ansible_file_map = other_file_map;
+            ansible_file_map = other_file_map
         
         devices = component[DEVICE_KEY]
         if devices == None:
@@ -87,6 +91,7 @@ def setupAnsibleComponents(rootPath, ansibleMainPath, components):
     
     buildAnsibleMainFile(ansibleMainPath, zookeeper_ansible_file_map)
     buildAnsibleMainFile(ansibleMainPath, kafka_ansible_file_map)
+    buildAnsibleMainFile(ansibleMainPath, redis_ansible_file_map)
     buildAnsibleMainFile(ansibleMainPath, other_file_map)
 
 def setupAnsibleCommonsPostStep(rootPath, ansibleMainPath, commons):

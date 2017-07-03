@@ -7,6 +7,7 @@ import serviceManagerSetupForCollection
 import serviceManagerSetupForKafka
 import serviceManagerSetupForCache
 import serviceManagerSetupForLogging
+import serviceManagerSetupForRedis
 import serviceManagerSetupForCommons
 
 import yaml
@@ -25,6 +26,7 @@ COLLECTION_KEY = "collection"
 KAFKA_KEY = "kafka"
 CACHE_KEY = "cache"
 LOGGING_KEY = "logging"
+REDIS_KEY = "redis"
 
 class serviceManagerSetup:
 
@@ -72,6 +74,9 @@ class serviceManagerSetup:
         
         self.logging = self.components[LOGGING_KEY]
         serviceManagerSetupForLogging.setupAnsibleCache(self.rootPath, self.logging)
+        
+        self.rediss = self.components[REDIS_KEY]
+        serviceManagerSetupForRedis.setupAnsibleRedis(self.rootPath, self.rediss)
         
         serviceManagerSetupForCommons.setupAnsibleCommons(self.rootPath, self.commons)
 
