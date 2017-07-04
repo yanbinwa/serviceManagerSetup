@@ -14,7 +14,7 @@ if [ "$dockerExistContainer" != "" ]; then
 fi
 
 #read the manifest file to build the host template
-python $ROOT_PATH/script/serviceManagerSetup.py $ROOT_PATH/conf/manifest1.yml
+python $ROOT_PATH/script/serviceManagerSetup.py $ROOT_PATH/conf/manifest.yml
 
 #create docker container
 sh $ROOT_PATH/target/docker/docker_container.sh

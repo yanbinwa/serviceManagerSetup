@@ -1,4 +1,4 @@
-root_path : /Users/yanbinwa/Documents/workspace/springboot/serviceManager/serviceManagerSetup
+root_path : /root/yanbinwa/ansible
 ansible_host : /target/ansible/host.template
 docker_container : /target/docker/docker_container.sh
 
@@ -15,42 +15,18 @@ components:
     serverScript : /opt/zookeeper-3.4.6/bin/zkServer.sh
     
     devices:
-      zookeeper_1 :
-        name : zookeeper_1
+      zookeeper_standalone :
+        name : zookeeper_standalone
         user : root
         password : cisco123
         ip : 172.18.0.11
         port : 2191
-        myid : /conf/zookeeper/zookeeper_1/myid
-        conf : /conf/zookeeper/zookeeper_1/zoo.cfg
+        myid : /conf/zookeeper/zookeeper_standalone/myid
+        conf : /conf/zookeeper/zookeeper_standalone/zoo.cfg
         dockerImage : ubuntu:v2
         dockerNet : yanbin
-        ansibleFile : /target/ansible/zookeeper/zookeeper_1.yaml
-
-      zookeeper_2:
-        name : zookeeper_2
-        user : root
-        password : cisco123
-        ip : 172.18.0.12
-        port : 2192
-        myid : /conf/zookeeper/zookeeper_2/myid
-        conf : /conf/zookeeper/zookeeper_2/zoo.cfg
-        dockerImage : ubuntu:v2
-        dockerNet : yanbin
-        ansibleFile : /target/ansible/zookeeper/zookeeper_2.yaml
-
-      zookeeper_3:
-        name : zookeeper_3
-        user : root
-        password : cisco123
-        ip : 172.18.0.13
-        port : 2193
-        myid : /conf/zookeeper/zookeeper_3/myid
-        conf : /conf/zookeeper/zookeeper_3/zoo.cfg
-        dockerImage : ubuntu:v2
-        dockerNet : yanbin
-        ansibleFile : /target/ansible/zookeeper/zookeeper_3.yaml
-
+        ansibleFile : /target/ansible/zookeeper/zookeeper_standalone.yaml
+        
   kafka:
     package : /package/kafka/kafka_2.11-0.9.0.0.tgz
     template : /template/kafka/kafka.yaml
@@ -61,127 +37,155 @@ components:
     serverScript : /opt/kafka_2.11-0.9.0.0/bin/kafka-server-start.sh
     
     devices:
-      kafka_1 :
-        name : kafka_1
+      kafka_standalone :
+        name : kafka_standalone
         user : root
         password : cisco123
         ip : 172.18.0.41
         port : 9101
-        conf : /conf/kafka/kafka_1/server.properties
+        conf : /conf/kafka/kafka_standalone/server.properties
         dockerImage : ubuntu:v2
         dockerNet : yanbin
-        ansibleFile : /target/ansible/kafka/kafka_1.yaml
+        ansibleFile : /target/ansible/kafka/kafka_standalone.yaml
         
-      kafka_2 :
-        name : kafka_2
-        user : root
-        password : cisco123
-        ip : 172.18.0.42
-        port : 9102
-        conf : /conf/kafka/kafka_2/server.properties
-        dockerImage : ubuntu:v2
-        dockerNet : yanbin
-        ansibleFile : /target/ansible/kafka/kafka_2.yaml
-        
-      kafka_3 :
-        name : kafka_3
-        user : root
-        password : cisco123
-        ip : 172.18.0.43
-        port : 9103
-        conf : /conf/kafka/kafka_3/server.properties
-        dockerImage : ubuntu:v2
-        dockerNet : yanbin
-        ansibleFile : /target/ansible/kafka/kafka_3.yaml
-
   orchestration:
     package : /package/orchestration/serviceManagerOrchestration-1.0-SNAPSHOT.jar
     template : /template/orchestration/orchestration.yaml
-    setup_dir : /opt
+    setup_dir : /opt/orchestration
+    logFilePath: /opt/orchestration/log
+    logFiles: 'message,console'
     devices :
-      orchestration_active :
-        name : orchestration_active
+      orchestration_standalone :
+        name : orchestration_standalone
         user : root
         password : cisco123
         ip : 172.18.0.21
         port : 8091
-        command : 'nohup java -Dspring.profiles.active=active -jar /opt/serviceManagerOrchestration-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        command : 'nohup java -Dspring.profiles.active=standalone -jar /opt/orchestration/serviceManagerOrchestration-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
         dockerImage : ubuntu:v2
         dockerNet : yanbin
-        ansibleFile : /target/ansible/orchestration/orchestration_active.yaml
-
-      orchestration_standby :
-        name : orchestration_standby
-        user : root
-        password : cisco123
-        ip : 172.18.0.22
-        port : 8092
-        command : 'nohup java -Dspring.profiles.active=standby -jar /opt/serviceManagerOrchestration-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
-        dockerImage : ubuntu:v2
-        dockerNet : yanbin
-        ansibleFile : /target/ansible/orchestration/orchestration_standby.yaml
+        ansibleFile : /target/ansible/orchestration/orchestration_standalone.yaml
+    
+    flume:
+      kafkaBrokerList: '172.18.0.41:9101'
+      kafkaTopic: logging
+      kafkaPartitionId: 0
+      flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
+      flumeConfTargetRootPath: /target/flume/orchestration
+      flumeConfTemplate: /template/flume/logAgent.conf.template
+      flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
+      flumeConfName: log.conf
 
   collection:
     package : /package/collection/serviceManagerCollection-1.0-SNAPSHOT.jar
     template : /template/collection/collection.yaml
-    setup_dir : /opt
+    setup_dir : /opt/collection
+    logFilePath: /opt/collection/log
+    logFiles: 'message,console'
     devices :
-      collection_A :
-        name : collection_A
+      collection_standalone :
+        name : collection_standalone
         user : root
         password : cisco123
         ip : 172.18.0.31
         port : 8101
-        command : 'nohup java -Dspring.profiles.active=serviceA -jar /opt/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        command : 'nohup java -Dspring.profiles.active=standalone -jar /opt/collection/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
         dockerImage : ubuntu:v2
         dockerNet : yanbin
-        ansibleFile : /target/ansible/collection/collection_A.yaml
-        
-      collection_B :
-        name : collection_B
-        user : root
-        password : cisco123
-        ip : 172.18.0.32
-        port : 8102
-        command : 'nohup java -Dspring.profiles.active=serviceB -jar /opt/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
-        dockerImage : ubuntu:v2
-        dockerNet : yanbin
-        ansibleFile : /target/ansible/collection/collection_B.yaml
-        
-      collection_C :
-        name : collection_C
-        user : root
-        password : cisco123
-        ip : 172.18.0.33
-        port : 8103
-        command : 'nohup java -Dspring.profiles.active=serviceC -jar /opt/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
-        dockerImage : ubuntu:v2
-        dockerNet : yanbin
-        ansibleFile : /target/ansible/collection/collection_C.yaml
+        ansibleFile : /target/ansible/collection/collection_standalone.yaml
+    
+    flume:
+      kafkaBrokerList: '172.18.0.41:9101'
+      kafkaTopic: logging
+      kafkaPartitionId: 1
+      flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
+      flumeConfTargetRootPath: /target/flume/collection
+      flumeConfTemplate: /template/flume/logAgent.conf.template
+      flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
+      flumeConfName: log.conf
         
   cache:
     package : /package/cache/serviceManagerCache-1.0-SNAPSHOT.jar
     template : /template/cache/cache.yaml
-    setup_dir : /opt
+    setup_dir : /opt/cache
+    logFilePath: /opt/cache/log
+    logFiles: 'message,console'
     devices :
-      cache_A :
-        name : cache_A
+      cache_standalone :
+        name : cache_standalone
         user : root
         password : cisco123
         ip : 172.18.0.51
         port : 8111
-        command : 'nohup java -Dspring.profiles.active=serviceA -jar /opt/serviceManagerCache-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        command : 'nohup java -Dspring.profiles.active=standalone -jar /opt/cache/serviceManagerCache-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
         dockerImage : ubuntu:v2
         dockerNet : yanbin
-        ansibleFile : /target/ansible/cache/cache_A.yaml
+        ansibleFile : /target/ansible/cache/cache_standalone.yaml
+    
+    flume:
+      kafkaBrokerList: '172.18.0.41:9101,172.18.0.42:9102,172.18.0.43:9103'
+      kafkaTopic: logging
+      kafkaPartitionId: 2
+      flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
+      flumeConfTargetRootPath: /target/flume/cache
+      flumeConfTemplate: /template/flume/logAgent.conf.template
+      flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
+      flumeConfName: log.conf
         
-      cache_B :
-        name : cache_B
+  logging:
+    template: /template/logging/logging.yaml
+    devices:
+      logging :
+        name : logging
         user : root
         password : cisco123
-        ip : 172.18.0.52
-        port : 8112
-        command : 'nohup java -Dspring.profiles.active=serviceB -jar /opt/serviceManagerCache-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        ip : 172.18.0.61
+        port : 8121
         dockerImage : ubuntu:v2
         dockerNet : yanbin
-        ansibleFile : /target/ansible/cache/cache_B.yaml
+        ansibleFile : /target/ansible/logging/logging.yaml
+    flume:
+        kafkaBrokerList: '172.18.0.41:9101,172.18.0.42:9102,172.18.0.43:9103'
+        kafkaTopic: logging
+        flumeConfTargetRootPath: /target/flume/logging
+        flumeConfTemplate: /template/flume/logAgg.conf.template
+        flumeConfName: log.conf
+        flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
+        logFileRootPath: /opt/logging
+        
+  redis:
+    package : /package/redis/redis-2.8.0.tar.gz
+    template : /template/redis/redis.yaml
+    setup_dir : /opt
+    conf_dir : /opt/redis-2.8.0
+    conf_file : /opt/redis-2.8.0/redis.conf
+    serverScript : /opt/redis-2.8.0/src/redis-server /opt/redis-2.8.0/redis.conf
+    make_dir : /opt/redis-2.8.0
+    devices:
+      redis_1 :
+        name : redis_1
+        user : root
+        password : cisco123
+        ip : 172.18.0.71
+        port : 6381
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        conf : /conf/redis/redis_1/redis.conf
+        ansibleFile : /target/ansible/redis/redis_1.yaml
+        
+commons:
+  flume:
+    serviceGroup: 'orchestration,collection,cache,logging'
+    name: flume
+    user: root
+    preStep:
+      package: /package/flume/apache-flume-1.7.0-bin.tar.gz
+      setup_dir : /opt
+      template: /template/flume/flume_install.yaml
+      ansibleFile: /target/ansible/flume/flume_install.yaml
+    postStep: 
+      template: /template/flume/flume_start.yaml
+      ansibleFile: /target/ansible/flume/flume_start.yaml
+      serverScript: /opt/apache-flume-1.7.0-bin/bin/flume-ng
+      confDir: /opt/apache-flume-1.7.0-bin/conf
+      confName: log.conf
