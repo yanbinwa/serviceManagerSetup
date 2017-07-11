@@ -123,11 +123,39 @@ components:
         ansibleFile : /target/ansible/cache/cache_standalone.yaml
     
     flume:
-      kafkaBrokerList: '172.18.0.41:9101,172.18.0.42:9102,172.18.0.43:9103'
+      kafkaBrokerList: '172.18.0.41:9101'
       kafkaTopic: logging
       kafkaPartitionId: 2
       flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
       flumeConfTargetRootPath: /target/flume/cache
+      flumeConfTemplate: /template/flume/logAgent.conf.template
+      flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
+      flumeConfName: log.conf
+
+  aggregation:
+    package : /package/aggregation/serviceManagerAggregation-1.0-SNAPSHOT.jar
+    template : /template/aggregation/aggregation.yaml
+    setup_dir : /opt/aggregation
+    logFilePath: /opt/aggregation/log
+    logFiles: 'message,console'
+    devices :
+      aggregation_standalone :
+        name : aggregation_standalone
+        user : root
+        password : cisco123
+        ip : 172.18.0.81
+        port : 8131
+        command : 'nohup java -Dspring.profiles.active=standalone -jar /opt/aggregation/serviceManagerAggregation-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/aggregation/aggregation_standalone.yaml
+    
+    flume:
+      kafkaBrokerList: '172.18.0.41:9101'
+      kafkaTopic: logging
+      kafkaPartitionId: 2
+      flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
+      flumeConfTargetRootPath: /target/flume/aggregation
       flumeConfTemplate: /template/flume/logAgent.conf.template
       flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
       flumeConfName: log.conf
@@ -145,7 +173,7 @@ components:
         dockerNet : yanbin
         ansibleFile : /target/ansible/logging/logging.yaml
     flume:
-        kafkaBrokerList: '172.18.0.41:9101,172.18.0.42:9102,172.18.0.43:9103'
+        kafkaBrokerList: '172.18.0.41:9101'
         kafkaTopic: logging
         flumeConfTargetRootPath: /target/flume/logging
         flumeConfTemplate: /template/flume/logAgg.conf.template
@@ -175,7 +203,7 @@ components:
         
 commons:
   flume:
-    serviceGroup: 'orchestration,collection,cache,logging'
+    serviceGroup: 'orchestration,collection,cache,logging,aggregation'
     name: flume
     user: root
     preStep:

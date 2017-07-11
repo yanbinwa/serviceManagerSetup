@@ -1,0 +1,20 @@
+---
+- hosts: $_hostname_
+  user: $_user_
+  sudo: yes
+  tasks:
+
+  - name: Create install path
+    file: path=$_aggregationJarInstallPath_  state=directory
+
+  - name: Create log path
+    file: path=$_aggregationLogDir_  state=directory
+
+  - name: Copy aggregation jar
+    copy: src=$_aggregationJarSrc_  dest=$_aggregationJarInstallPath_
+
+  - name: Start aggregation service
+    shell: $_aggregationStartCommand_
+
+  - name: Copy flume conf
+    copy: src=$_aggregationFlumeConfSrc_   dest=$_flumeConfPath_

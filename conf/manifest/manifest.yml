@@ -221,6 +221,45 @@ components:
       flumeConfTemplate: /template/flume/logAgent.conf.template
       flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
       flumeConfName: log.conf
+  
+  aggregation:
+    package : /package/aggregation/serviceManagerAggregation-1.0-SNAPSHOT.jar
+    template : /template/aggregation/aggregation.yaml
+    setup_dir : /opt/aggregation
+    logFilePath: /opt/aggregation/log
+    logFiles: 'message,console'
+    devices :
+      aggregation_A :
+        name : aggregation_A
+        user : root
+        password : cisco123
+        ip : 172.18.0.81
+        port : 8131
+        command : 'nohup java -Dspring.profiles.active=serviceA -jar /opt/aggregation/serviceManagerAggregation-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/aggregation/aggregation_A.yaml
+        
+      aggregation_B :
+        name : aggregation_B
+        user : root
+        password : cisco123
+        ip : 172.18.0.82
+        port : 8132
+        command : 'nohup java -Dspring.profiles.active=serviceB -jar /opt/aggregation/serviceManagerAggregation-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/aggregation/aggregation_B.yaml
+    
+    flume:
+      kafkaBrokerList: '172.18.0.41:9101,172.18.0.42:9102,172.18.0.43:9103'
+      kafkaTopic: logging
+      kafkaPartitionId: 2
+      flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
+      flumeConfTargetRootPath: /target/flume/aggregation
+      flumeConfTemplate: /template/flume/logAgent.conf.template
+      flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
+      flumeConfName: log.conf
         
   logging:
     template: /template/logging/logging.yaml

@@ -9,6 +9,7 @@ import serviceManagerSetupForCache
 import serviceManagerSetupForLogging
 import serviceManagerSetupForRedis
 import serviceManagerSetupForCommons
+import serviceManagerSetupForAggregation
 
 import yaml
 import sys
@@ -27,6 +28,7 @@ KAFKA_KEY = "kafka"
 CACHE_KEY = "cache"
 LOGGING_KEY = "logging"
 REDIS_KEY = "redis"
+AGGREGATION_KEY = "aggregation"
 
 class serviceManagerSetup:
 
@@ -71,6 +73,9 @@ class serviceManagerSetup:
         
         self.caches = self.components[CACHE_KEY]
         serviceManagerSetupForCache.setupAnsibleCache(self.rootPath, self.caches)
+        
+        self.aggregations = self.components[AGGREGATION_KEY]
+        serviceManagerSetupForAggregation.setupAnsibleAggregation(self.rootPath, self.aggregations)
         
         self.logging = self.components[LOGGING_KEY]
         serviceManagerSetupForLogging.setupAnsibleCache(self.rootPath, self.logging)
