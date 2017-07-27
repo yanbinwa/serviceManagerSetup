@@ -44,7 +44,8 @@ def setupAnsibleHost(ansibleHostPath, components, commons):
     
     buildAnsibleHost(ansibleHostPath, host_map)
     
-    setupAnsibleCommonHost(ansibleHostPath, components, commons, host_map)
+    if commons != None:
+        setupAnsibleCommonHost(ansibleHostPath, components, commons, host_map)
     
 def buildAnsibleHost(ansibleHostPath, host_map):
    

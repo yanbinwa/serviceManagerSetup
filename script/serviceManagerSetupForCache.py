@@ -36,8 +36,8 @@ FLUME_KAFKA_PARTITION_ID_KEY = "kafkaPartitionId"
 
 def setupAnsibleCache(rootPath, caches):
     if caches == None:
-        print "The caches map should not be Null"
-        return -1
+        print "The caches map is null. Just return"
+        return
     
     flume_info_map = caches[CACHE_FLUME_INFO_KEY]
     if flume_info_map == None:

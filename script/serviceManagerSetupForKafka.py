@@ -27,8 +27,8 @@ KAFKA_SERVER_SCRPIT_WORD = "$_kafkaServerScript_"
 
 def setupAnsibleKafka(rootPath, kafkas):
     if kafkas == None:
-        print "The kafkas map should not be Null"
-        return -1
+        print "The kafkas map is null. Just return"
+        return
     
     kafka_ansible_map = {}
     kafka_package_path = rootPath + kafkas[KAFKA_PACKAGE_KEY]

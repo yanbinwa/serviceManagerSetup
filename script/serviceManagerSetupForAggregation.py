@@ -36,8 +36,8 @@ FLUME_KAFKA_PARTITION_ID_KEY = "kafkaPartitionId"
 
 def setupAnsibleAggregation(rootPath, aggregations):
     if aggregations == None:
-        print "The aggregations map should not be Null"
-        return -1
+        print "The aggregations map is Null. Just return"
+        return
     
     flume_info_map = aggregations[AGGREGATION_FLUME_INFO_KEY]
     if flume_info_map == None:

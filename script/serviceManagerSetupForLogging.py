@@ -25,10 +25,10 @@ LOGGING_FLUME_CONF_DES_WORD = "$_flumeConfPath_"
 
 LOGGING_ANSIBLE_FILE_PATH = "ansibleFile"
 
-def setupAnsibleCache(rootPath, loggings):
+def setupAnsibleLogging(rootPath, loggings):
     if loggings == None:
-        print "The logging map should not be Null"
-        return -1
+        print "The logging map is null. Just return"
+        return
     
     flume_info_map = loggings[LOGGING_FLUME_INFO_KEY]
     if flume_info_map == None:

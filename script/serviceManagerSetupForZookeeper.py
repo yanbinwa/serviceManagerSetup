@@ -29,8 +29,8 @@ ZOOKEEPER_SERVER_SCRPIT_WORD = "$_zookeeperServerScript_"
 
 def setupAnsibleZookeeper(rootPath, zookeepers):
     if zookeepers == None:
-        print "The zookeepers map should not be Null"
-        return -1
+        print "The zookeepers map is null. Just return"
+        return
     
     zookeeper_ansible_map = {}
     zookeeper_package_path = rootPath + zookeepers[ZOOKEEPER_PACKAGE_KEY]

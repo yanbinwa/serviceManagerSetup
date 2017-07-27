@@ -36,8 +36,8 @@ FLUME_KAFKA_PARTITION_ID_KEY = "kafkaPartitionId"
 
 def setupAnsibleOrchestration(rootPath, orchestrations):
     if orchestrations == None:
-        print "The orchestrations map should not be Null"
-        return -1
+        print "The orchestrations is null. Just return"
+        return
     
     flume_info_map = orchestrations[ORCHESTRATION_FLUME_INFO_KEY]
     if flume_info_map == None:

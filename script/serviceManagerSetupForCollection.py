@@ -37,8 +37,8 @@ FLUME_KAFKA_PARTITION_ID_KEY = "kafkaPartitionId"
 
 def setupAnsibleCollection(rootPath, collections):
     if collections == None:
-        print "The collections map should not be Null"
-        return -1
+        print "The collections map is null. Just return"
+        return
     
     flume_info_map = collections[COLLECTION_FLUME_INFO_KEY]
     if flume_info_map == None:

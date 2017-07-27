@@ -61,7 +61,7 @@ components:
         password : cisco123
         ip : 172.18.0.21
         port : 8091
-        command : 'nohup java -Dspring.profiles.active=standalone -jar /opt/orchestration/serviceManagerOrchestration-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        command : 'nohup java -Dspring.profiles.active=standalone1 -jar /opt/orchestration/serviceManagerOrchestration-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
         dockerImage : ubuntu:v2
         dockerNet : yanbin
         ansibleFile : /target/ansible/orchestration/orchestration_standalone.yaml
@@ -89,7 +89,7 @@ components:
         password : cisco123
         ip : 172.18.0.31
         port : 8101
-        command : 'nohup java -Dspring.profiles.active=standalone -jar /opt/collection/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        command : 'nohup java -Dspring.profiles.active=standalone1 -jar /opt/collection/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
         dockerImage : ubuntu:v2
         dockerNet : yanbin
         ansibleFile : /target/ansible/collection/collection_standalone.yaml
@@ -117,7 +117,7 @@ components:
         password : cisco123
         ip : 172.18.0.51
         port : 8111
-        command : 'nohup java -Dspring.profiles.active=standalone -jar /opt/cache/serviceManagerCache-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        command : 'nohup java -Dspring.profiles.active=standalone1 -jar /opt/cache/serviceManagerCache-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
         dockerImage : ubuntu:v2
         dockerNet : yanbin
         ansibleFile : /target/ansible/cache/cache_standalone.yaml
@@ -145,7 +145,7 @@ components:
         password : cisco123
         ip : 172.18.0.81
         port : 8131
-        command : 'nohup java -Dspring.profiles.active=standalone -jar /opt/aggregation/serviceManagerAggregation-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        command : 'nohup java -Dspring.profiles.active=standalone1 -jar /opt/aggregation/serviceManagerAggregation-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
         dockerImage : ubuntu:v2
         dockerNet : yanbin
         ansibleFile : /target/ansible/aggregation/aggregation_standalone.yaml
@@ -200,6 +200,27 @@ components:
         dockerNet : yanbin
         conf : /conf/redis/redis_1/redis.conf
         ansibleFile : /target/ansible/redis/redis_1.yaml
+
+  config:
+    package : /package/config/serviceManagerConfig-1.0-SNAPSHOT.jar
+    template : /template/config/config.yaml
+    setup_dir : /opt/config
+    logFilePath : /opt/config/log
+    logFiles : 'message,console'
+    manifest_src : /conf/config/manifest.yml
+    manifest_target : /opt/config/conf/manifest.yml
+    conf_dir : /opt/config/conf
+    devices :
+      config_standalone :
+        name : config_standalone
+        user : root
+        password : cisco123
+        ip : 172.18.0.91
+        port : 8141
+        command : 'nohup java -Dspring.profiles.active=standalone1 -jar /opt/config/serviceManagerConfig-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+        dockerImage : ubuntu:v2
+        dockerNet : yanbin
+        ansibleFile : /target/ansible/config/config_standalone.yaml
         
 commons:
   flume:

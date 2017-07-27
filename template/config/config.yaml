@@ -1,0 +1,23 @@
+---
+- hosts: $_hostname_
+  user: $_user_
+  sudo: yes
+  tasks:
+
+  - name: Create install path
+    file: path=$_jarInstallPath_  state=directory
+
+  - name: Create log path
+    file: path=$_logDir_  state=directory
+
+  - name: Create conf path
+    file: path=$_confDir_  state=directory
+
+  - name: Copy config jar
+    copy: src=$_jarSrc_  dest=$_jarInstallPath_
+
+  - name: Copy manifest.yml
+    copy: src=$_manifestSrc_  dest=$_manifestTarget_
+
+  - name: Start orchestration service
+    shell: $_startCommand_

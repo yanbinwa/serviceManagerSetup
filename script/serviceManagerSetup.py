@@ -10,25 +10,27 @@ import serviceManagerSetupForLogging
 import serviceManagerSetupForRedis
 import serviceManagerSetupForCommons
 import serviceManagerSetupForAggregation
+import serviceManagerSetupForConfig
 
 import yaml
 import sys
 
-ROOT_TARGET_PATH_KEY = "root_path"
-ANSIBLE_HOST_PATH_KEY = "ansible_host"
-ANSIBLE_MAIN_PATH_KEY = "ansible_main"
-COMPONENT_KEY = "components"
-COMMON_KEY = "commons"
-DOCKER_CONTAINER_PATH_KEY = "docker_container"
+ROOT_TARGET_PATH_KEY = 'root_path'
+ANSIBLE_HOST_PATH_KEY = 'ansible_host'
+ANSIBLE_MAIN_PATH_KEY = 'ansible_main'
+COMPONENT_KEY = 'components'
+COMMON_KEY = 'commons'
+DOCKER_CONTAINER_PATH_KEY = 'docker_container'
 
-ZOOKEEPER_KEY = "zookeeper"
-ORCHESTRATION_KEY = "orchestration"
-COLLECTION_KEY = "collection"
-KAFKA_KEY = "kafka"
-CACHE_KEY = "cache"
-LOGGING_KEY = "logging"
-REDIS_KEY = "redis"
-AGGREGATION_KEY = "aggregation"
+ZOOKEEPER_KEY = 'zookeeper'
+ORCHESTRATION_KEY = 'orchestration'
+COLLECTION_KEY = 'collection'
+KAFKA_KEY = 'kafka'
+CACHE_KEY = 'cache'
+LOGGING_KEY = 'logging'
+REDIS_KEY = 'redis'
+AGGREGATION_KEY = 'aggregation'
+CONFIG_KEY = 'config'
 
 class serviceManagerSetup:
 
@@ -78,10 +80,13 @@ class serviceManagerSetup:
         serviceManagerSetupForAggregation.setupAnsibleAggregation(self.rootPath, self.aggregations)
         
         self.logging = self.components[LOGGING_KEY]
-        serviceManagerSetupForLogging.setupAnsibleCache(self.rootPath, self.logging)
+        serviceManagerSetupForLogging.setupAnsibleLogging(self.rootPath, self.logging)
         
         self.rediss = self.components[REDIS_KEY]
         serviceManagerSetupForRedis.setupAnsibleRedis(self.rootPath, self.rediss)
+        
+        self.configs = self.components[CONFIG_KEY]
+        serviceManagerSetupForConfig.setupAnsibleConfig(self.rootPath, self.configs)
         
         serviceManagerSetupForCommons.setupAnsibleCommons(self.rootPath, self.commons)
 

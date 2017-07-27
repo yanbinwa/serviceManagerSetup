@@ -27,8 +27,8 @@ REDIS_MAKE_DIR_WORD = "$_redisMakePath_"
 
 def setupAnsibleRedis(rootPath, rediss):
     if rediss == None:
-        print "The rediss map should not be Null"
-        return -1
+        print "The rediss map is Null. Just return"
+        return
     
     redis_ansible_map = {}
     redis_package_path = rootPath + rediss[REDIS_PACKAGE_KEY]
