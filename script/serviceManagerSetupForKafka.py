@@ -1,29 +1,9 @@
 import os
+import serviceManagerSetupConstants
 
-DEVICE_KEY = "devices"
+KAFKA_LOG_DIR_KEY = "log_dir"
 
-KAFKA_PACKAGE_KEY = "package"
-KAFKA_TEMPLATE_KEY = "template"
-KAFKA_INSTALL_PATH_KEY = "setup_dir"
-KAFKA_CONF_PATH_KEY = "conf_dir"
-KAFKA_CONF_FILE_KEY = "conf_file"
-KAFKA_LOG_PATH_KEY = "log_dir"
-KAFKA_SERVER_SCRPIT_PATH_KEY = "serverScript"
-
-KAFKA_NAME_KEY = "name"
-KAFKA_USER_KEY = "user"
-KAFKA_CONF_SRC_KEY = "conf"
-KAFKA_ANSIBLE_FILE_PATH = "ansibleFile"
-
-KAFKA_HOST_NAME_WORD = "$_hostname_"
-KAFKA_HOST_USER_WORD = "$_user_"
-KAFKA_PACKAGE_SRC_WORD = "$_kafkaPackage_"
-KAFKA_PACKAGE_INSTALL_WORD = "$_kafkaPackageInstallPath_"
-KAFKA_CONFIG_SRC_WORD = "$_kafkaConfSrc_"
-KAFKA_CONFIG_TARGET_WORD = "$_kafkaConfTarget_"
-KAFKA_CONFIG_TARGET_FILE_WORD = "$_kafkaConfFile_"
-KAFKA_LOG_DIR_WORD = "$_kafkaLogDir_"
-KAFKA_SERVER_SCRPIT_WORD = "$_kafkaServerScript_"
+KAFKA_LOG_DIR_WORD = "$_logDir_"
 
 def setupAnsibleKafka(rootPath, kafkas):
     if kafkas == None:
@@ -31,15 +11,14 @@ def setupAnsibleKafka(rootPath, kafkas):
         return
     
     kafka_ansible_map = {}
-    kafka_package_path = rootPath + kafkas[KAFKA_PACKAGE_KEY]
-    kafka_template_file = rootPath + kafkas[KAFKA_TEMPLATE_KEY]
-    kafka_install_path = kafkas[KAFKA_INSTALL_PATH_KEY]
-    kafka_conf_path = kafkas[KAFKA_CONF_PATH_KEY]
-    kafka_conf_file = kafkas[KAFKA_CONF_FILE_KEY]
-    kafka_log_path = kafkas[KAFKA_LOG_PATH_KEY]
-    kafka_serverScript_path = kafkas[KAFKA_SERVER_SCRPIT_PATH_KEY]
+    kafka_package_path = rootPath + kafkas[serviceManagerSetupConstants.PACKAGE_KEY]
+    kafka_template_file = rootPath + kafkas[serviceManagerSetupConstants.TEMPLATE_KEY]
+    kafka_install_path = kafkas[serviceManagerSetupConstants.INSTALL_PATH_KEY]
+    kafka_conf_path = kafkas[serviceManagerSetupConstants.CONF_PATH_KEY]
+    kafka_log_path = kafkas[KAFKA_LOG_DIR_KEY]
+    kafka_serverScript_path = kafkas[serviceManagerSetupConstants.SERVER_SCRPIT_PATH_KEY]
     
-    devices = kafkas[DEVICE_KEY]
+    devices = kafkas[serviceManagerSetupConstants.DEVICE_KEY]
     if devices == None:
         print "The kafka devices should not be Null"
         return -1
@@ -51,16 +30,15 @@ def setupAnsibleKafka(rootPath, kafkas):
             continue
         
         kafka_ansible_info = {}
-        kafka_ansible_info[KAFKA_HOST_NAME_WORD] = device[KAFKA_NAME_KEY]
-        kafka_ansible_info[KAFKA_HOST_USER_WORD] = device[KAFKA_USER_KEY]
-        kafka_ansible_info[KAFKA_PACKAGE_SRC_WORD] = kafka_package_path
-        kafka_ansible_info[KAFKA_PACKAGE_INSTALL_WORD] = kafka_install_path
-        kafka_ansible_info[KAFKA_CONFIG_SRC_WORD] = rootPath + device[KAFKA_CONF_SRC_KEY]
-        kafka_ansible_info[KAFKA_CONFIG_TARGET_WORD] = kafka_conf_path
-        kafka_ansible_info[KAFKA_CONFIG_TARGET_FILE_WORD] = kafka_conf_file
+        kafka_ansible_info[serviceManagerSetupConstants.HOST_NAME_WORD] = device[serviceManagerSetupConstants.NAME_KEY]
+        kafka_ansible_info[serviceManagerSetupConstants.HOST_USER_WORD] = device[serviceManagerSetupConstants.USER_KEY]
+        kafka_ansible_info[serviceManagerSetupConstants.PACKAGE_SRC_WORD] = kafka_package_path
+        kafka_ansible_info[serviceManagerSetupConstants.PACKAGE_INSTALL_PATH_WORD] = kafka_install_path
+        kafka_ansible_info[serviceManagerSetupConstants.CONF_SRC_WORD] = rootPath + device[serviceManagerSetupConstants.CONF_SRC_KEY]
+        kafka_ansible_info[serviceManagerSetupConstants.CONF_TARGET_WORD] = kafka_conf_path
         kafka_ansible_info[KAFKA_LOG_DIR_WORD] = kafka_log_path
-        kafka_ansible_info[KAFKA_ANSIBLE_FILE_PATH] = rootPath + device[KAFKA_ANSIBLE_FILE_PATH]
-        kafka_ansible_info[KAFKA_SERVER_SCRPIT_WORD] = kafka_serverScript_path
+        kafka_ansible_info[serviceManagerSetupConstants.ANSIBLE_FILE_PATH] = rootPath + device[serviceManagerSetupConstants.ANSIBLE_FILE_PATH]
+        kafka_ansible_info[serviceManagerSetupConstants.SERVER_SCRIPT_WORD] = kafka_serverScript_path
         kafka_ansible_map[deviceKey] = kafka_ansible_info
         
     buildAnsibleKafka(kafka_template_file, kafka_ansible_map)
@@ -78,17 +56,16 @@ def buildAnsibleKafka(kafka_template_file, kafka_ansible_map):
             print "kafka ansible info " + kafkaAnsibleInfoKey + " should not be Null"
             continue
         
-        tempTemplate = template.replace(KAFKA_HOST_NAME_WORD, kafkaAnsibleInfo[KAFKA_HOST_NAME_WORD])
-        tempTemplate = tempTemplate.replace(KAFKA_HOST_USER_WORD, kafkaAnsibleInfo[KAFKA_HOST_USER_WORD])
-        tempTemplate = tempTemplate.replace(KAFKA_PACKAGE_SRC_WORD, kafkaAnsibleInfo[KAFKA_PACKAGE_SRC_WORD])
-        tempTemplate = tempTemplate.replace(KAFKA_PACKAGE_INSTALL_WORD, kafkaAnsibleInfo[KAFKA_PACKAGE_INSTALL_WORD])
-        tempTemplate = tempTemplate.replace(KAFKA_CONFIG_SRC_WORD, kafkaAnsibleInfo[KAFKA_CONFIG_SRC_WORD])
-        tempTemplate = tempTemplate.replace(KAFKA_CONFIG_TARGET_WORD, kafkaAnsibleInfo[KAFKA_CONFIG_TARGET_WORD])
-        tempTemplate = tempTemplate.replace(KAFKA_CONFIG_TARGET_FILE_WORD, kafkaAnsibleInfo[KAFKA_CONFIG_TARGET_FILE_WORD])
+        tempTemplate = template.replace(serviceManagerSetupConstants.HOST_NAME_WORD, kafkaAnsibleInfo[serviceManagerSetupConstants.HOST_NAME_WORD])
+        tempTemplate = tempTemplate.replace(serviceManagerSetupConstants.HOST_USER_WORD, kafkaAnsibleInfo[serviceManagerSetupConstants.HOST_USER_WORD])
+        tempTemplate = tempTemplate.replace(serviceManagerSetupConstants.PACKAGE_SRC_WORD, kafkaAnsibleInfo[serviceManagerSetupConstants.PACKAGE_SRC_WORD])
+        tempTemplate = tempTemplate.replace(serviceManagerSetupConstants.PACKAGE_INSTALL_PATH_WORD, kafkaAnsibleInfo[serviceManagerSetupConstants.PACKAGE_INSTALL_PATH_WORD])
+        tempTemplate = tempTemplate.replace(serviceManagerSetupConstants.CONF_SRC_WORD, kafkaAnsibleInfo[serviceManagerSetupConstants.CONF_SRC_WORD])
+        tempTemplate = tempTemplate.replace(serviceManagerSetupConstants.CONF_TARGET_WORD, kafkaAnsibleInfo[serviceManagerSetupConstants.CONF_TARGET_WORD])
         tempTemplate = tempTemplate.replace(KAFKA_LOG_DIR_WORD, kafkaAnsibleInfo[KAFKA_LOG_DIR_WORD])
-        tempTemplate = tempTemplate.replace(KAFKA_SERVER_SCRPIT_WORD, kafkaAnsibleInfo[KAFKA_SERVER_SCRPIT_WORD])
+        tempTemplate = tempTemplate.replace(serviceManagerSetupConstants.SERVER_SCRIPT_WORD, kafkaAnsibleInfo[serviceManagerSetupConstants.SERVER_SCRIPT_WORD])
         
-        kafkaAnsibleFile = kafkaAnsibleInfo[KAFKA_ANSIBLE_FILE_PATH]
+        kafkaAnsibleFile = kafkaAnsibleInfo[serviceManagerSetupConstants.ANSIBLE_FILE_PATH]
         kafkaAnsibleFileDir = kafkaAnsibleFile[:kafkaAnsibleFile.rindex("/")]
     
         if not os.path.exists(kafkaAnsibleFileDir):

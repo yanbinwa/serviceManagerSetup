@@ -10,11 +10,8 @@
   - name: Create log path
     file: path=$_logDir_  state=directory
 
-  - name: Copy cache jar
+  - name: Copy deploy jar
     copy: src=$_jarSrc_  dest=$_jarInstallPath_
 
-  - name: Start cache service
+  - name: Start deploy service
     shell: $_startCommand_
-
-  - name: Copy flume conf
-    copy: src=$_flumeConfSrc_   dest=$_flumeConfPath_

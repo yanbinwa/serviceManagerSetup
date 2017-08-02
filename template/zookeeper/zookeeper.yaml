@@ -5,19 +5,19 @@
   tasks:
 
   - name: Unarchive the zookeeper install package to remote machine
-    unarchive: src=$_zookeeperPackage_  dest=$_zookeeperPackageInstallPath_
+    unarchive: src=$_package_  dest=$_packageInstallPath_
 
   - name: Copy zookeeper zoo.cfg
-    copy: src=$_zookeeperConfSrc_  dest=$_zookeeperConfTarget_
+    copy: src=$_confSrc_  dest=$_confTarget_
 
   - name: Create data dir 
-    file: path=$_zookeeperDataDir_  state=directory  mode=0755
+    file: path=$_dataDir_  state=directory  mode=0755
 
   - name: Create dataLog dir
-    file: path=$_zookeeperDataLogDir_  state=directory  mode=0755
+    file: path=$_dataLogDir_  state=directory  mode=0755
 
   - name: Copy myid file
-    copy: src=$_zookeeperMyidSrc_  dest=$_zookeeperDataDir_
+    copy: src=$_myidSrc_  dest=$_dataDir_
 
   - name: Start zookeeper
-    command: $_zookeeperServerScript_ start
+    command: $_serverScript_ start

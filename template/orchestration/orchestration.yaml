@@ -5,16 +5,16 @@
   tasks:
 
   - name: Create install path
-    file: path=$_orchestrationJarInstallPath_  state=directory
+    file: path=$_jarInstallPath_  state=directory
 
   - name: Create log path
-    file: path=$_orchestrationLogDir_  state=directory
+    file: path=$_logDir_  state=directory
 
   - name: Copy orchestration jar
-    copy: src=$_orchestrationJarSrc_  dest=$_orchestrationJarInstallPath_
+    copy: src=$_jarSrc_  dest=$_jarInstallPath_
 
   - name: Start orchestration service
-    shell: $_orchestrationStartCommand_
+    shell: $_startCommand_
 
   - name: Copy flume conf
-    copy: src=$_orchestrationFlumeConfSrc_   dest=$_flumeConfPath_
+    copy: src=$_flumeConfSrc_   dest=$_flumeConfPath_

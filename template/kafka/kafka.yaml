@@ -5,13 +5,13 @@
   tasks:
 
   - name: Unarchive the kafka install package to remote machine
-    unarchive: src=$_kafkaPackage_  dest=$_kafkaPackageInstallPath_
+    unarchive: src=$_package_  dest=$_packageInstallPath_
 
   - name: Copy kafka server.Properties
-    copy: src=$_kafkaConfSrc_  dest=$_kafkaConfTarget_
+    copy: src=$_confSrc_  dest=$_confTarget_
 
   - name: Create log dir 
-    file: path=$_kafkaLogDir_  state=directory  mode=0755
+    file: path=$_logDir_  state=directory  mode=0755
 
   - name: Start kafka
-    shell: nohup $_kafkaServerScript_  $_kafkaConfFile_ 2>&1 > /dev/null &
+    shell: nohup $_serverScript_  $_confFile_ 2>&1 > /dev/null &

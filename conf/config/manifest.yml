@@ -78,10 +78,36 @@ servicesInfo:
 
 deployInfo:
 
-  root_path : /root/yanbinwa/ansible
-  ansible_host : /target/ansible/host.template
-  ansible_main : /target/ansible/main.yaml
-  docker_container : /target/docker/docker_container.sh
+  deployService : deploy_standalone
+
+  baseInfo:
+    deploy_server_ip : "192.168.56.17"
+    deploy_server_username : root
+    deploy_server_password : Wyb13403408973
+    root_path : /root/yanbinwa/ansible
+    ansible_host : /target/ansible/host.template
+    ansible_main : /target/ansible/main.yaml
+    docker_container : /target/docker/docker_container.sh
+    manifest_dir: /conf
+    deploy_install_script: /script/install.sh
+    deploy_uninstall_script: /script/uninstallScript.sh
+
+  commons:
+    flume:
+      serviceGroup: ''
+      name: flume
+      user: root
+      preStep:
+        package: /package/flume/apache-flume-1.7.0-bin.tar.gz
+        setup_dir : /opt
+        template: /template/flume/flume_install.yaml
+        ansibleFile: /target/ansible/flume/flume_install.yaml
+      postStep: 
+        template: /template/flume/flume_start.yaml
+        ansibleFile: /target/ansible/flume/flume_start.yaml
+        serverScript: /opt/apache-flume-1.7.0-bin/bin/flume-ng
+        confDir: /opt/apache-flume-1.7.0-bin/conf
+        confName: log.conf
 
   components:
           
@@ -91,7 +117,6 @@ deployInfo:
       setup_dir : /opt/orchestration
       logFilePath: /opt/orchestration/log
       logFiles: 'message,console'
-      applicationTemplate : /template/orchestration/application.yaml
       consoleLog : /opt/orchestration/log/console.log
       devices :
         orchestration_standalone :
@@ -100,21 +125,23 @@ deployInfo:
           password : cisco123
           ip : 172.18.0.21
           port : 8091
-          command : 'nohup java -Dspring.profiles.active=standalone -jar /opt/orchestration/serviceManagerOrchestration-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+          rootUrl : "/iOrchestration"
+          command : 'nohup java -Dspring.profiles.active=standalone1 -jar /opt/orchestration/serviceManagerOrchestration-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
           dockerImage : ubuntu:v2
           dockerNet : yanbin
           ansibleFile : /target/ansible/orchestration/orchestration_standalone.yaml
           applicationFile : /target/application/orchestration/application-standalone.yaml
       
-      flume:
-        kafkaBrokerList: '172.18.0.41:9101'
-        kafkaTopic: logging
-        kafkaPartitionId: 0
-        flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
-        flumeConfTargetRootPath: /target/flume/orchestration
-        flumeConfTemplate: /template/flume/logAgent.conf.template
-        flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
-        flumeConfName: log.conf
+      features:
+        flume:
+          kafkaBrokerList: '172.18.0.41:9101'
+          kafkaTopic: logging
+          kafkaPartitionId: 0
+          flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
+          flumeConfTargetRootPath: /target/flume/orchestration
+          flumeConfTemplate: /template/flume/logAgent.conf.template
+          flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
+          flumeConfName: log.conf
 
     collection:
       package : /package/collection/serviceManagerCollection-1.0-SNAPSHOT.jar
@@ -122,7 +149,6 @@ deployInfo:
       setup_dir : /opt/collection
       logFilePath: /opt/collection/log
       logFiles: 'message,console'
-      applicationTemplate : /template/collection/application.yaml
       consoleLog : /opt/collection/log/console.log
       devices :
         collection_standalone :
@@ -131,21 +157,23 @@ deployInfo:
           password : cisco123
           ip : 172.18.0.31
           port : 8101
-          command : 'nohup java -Dspring.profiles.active=standalone -jar /opt/collection/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+          rootUrl : "/collection"
+          command : 'nohup java -Dspring.profiles.active=standalone1 -jar /opt/collection/serviceManagerCollection-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
           dockerImage : ubuntu:v2
           dockerNet : yanbin
           ansibleFile : /target/ansible/collection/collection_standalone.yaml
           applicationFile : /target/application/collection/application-standalone.yaml
       
-      flume:
-        kafkaBrokerList: '172.18.0.41:9101'
-        kafkaTopic: logging
-        kafkaPartitionId: 1
-        flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
-        flumeConfTargetRootPath: /target/flume/collection
-        flumeConfTemplate: /template/flume/logAgent.conf.template
-        flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
-        flumeConfName: log.conf
+      features:
+        flume:
+          kafkaBrokerList: '172.18.0.41:9101'
+          kafkaTopic: logging
+          kafkaPartitionId: 1
+          flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
+          flumeConfTargetRootPath: /target/flume/collection
+          flumeConfTemplate: /template/flume/logAgent.conf.template
+          flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
+          flumeConfName: log.conf
           
     cache:
       package : /package/cache/serviceManagerCache-1.0-SNAPSHOT.jar
@@ -153,7 +181,6 @@ deployInfo:
       setup_dir : /opt/cache
       logFilePath: /opt/cache/log
       logFiles: 'message,console'
-      applicationTemplate : /template/cache/application.yaml
       consoleLog : /opt/cache/log/console.log
       devices :
         cache_standalone :
@@ -162,21 +189,23 @@ deployInfo:
           password : cisco123
           ip : 172.18.0.51
           port : 8111
-          command : 'nohup java -Dspring.profiles.active=standalone -jar /opt/cache/serviceManagerCache-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+          rootUrl : "/cache"
+          command : 'nohup java -Dspring.profiles.active=standalone1 -jar /opt/cache/serviceManagerCache-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
           dockerImage : ubuntu:v2
           dockerNet : yanbin
           ansibleFile : /target/ansible/cache/cache_standalone.yaml
           applicationFile : /target/application/cache/application-standalone.yaml
       
-      flume:
-        kafkaBrokerList: '172.18.0.41:9101'
-        kafkaTopic: logging
-        kafkaPartitionId: 2
-        flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
-        flumeConfTargetRootPath: /target/flume/cache
-        flumeConfTemplate: /template/flume/logAgent.conf.template
-        flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
-        flumeConfName: log.conf
+      features:
+        flume:
+          kafkaBrokerList: '172.18.0.41:9101'
+          kafkaTopic: logging
+          kafkaPartitionId: 2
+          flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
+          flumeConfTargetRootPath: /target/flume/cache
+          flumeConfTemplate: /template/flume/logAgent.conf.template
+          flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
+          flumeConfName: log.conf
 
     aggregation:
       package : /package/aggregation/serviceManagerAggregation-1.0-SNAPSHOT.jar
@@ -184,7 +213,6 @@ deployInfo:
       setup_dir : /opt/aggregation
       logFilePath: /opt/aggregation/log
       logFiles: 'message,console'
-      applicationTemplate : /template/aggregation/application.yaml
       consoleLog : /opt/aggregation/log/console.log
       devices :
         aggregation_standalone :
@@ -193,18 +221,20 @@ deployInfo:
           password : cisco123
           ip : 172.18.0.81
           port : 8131
-          command : 'nohup java -Dspring.profiles.active=standalone -jar /opt/aggregation/serviceManagerAggregation-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+          rootUrl : "/aggregation"
+          command : 'nohup java -Dspring.profiles.active=standalone1 -jar /opt/aggregation/serviceManagerAggregation-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
           dockerImage : ubuntu:v2
           dockerNet : yanbin
           ansibleFile : /target/ansible/aggregation/aggregation_standalone.yaml
           applicationFile : /target/application/aggregation/application-standalone.yaml
       
-      flume:
-        kafkaBrokerList: '172.18.0.41:9101'
-        kafkaTopic: logging
-        kafkaPartitionId: 2
-        flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
-        flumeConfTargetRootPath: /target/flume/aggregation
-        flumeConfTemplate: /template/flume/logAgent.conf.template
-        flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
-        flumeConfName: log.conf
+      features:
+        flume:
+          kafkaBrokerList: '172.18.0.41:9101'
+          kafkaTopic: logging
+          kafkaPartitionId: 0
+          flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
+          flumeConfTargetRootPath: /target/flume/aggregation
+          flumeConfTemplate: /template/flume/logAgent.conf.template
+          flumeConfSrcTemplate: /template/flume/logAgent/logAgentSrc.template
+          flumeConfName: log.conf

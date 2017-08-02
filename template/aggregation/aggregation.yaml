@@ -5,16 +5,16 @@
   tasks:
 
   - name: Create install path
-    file: path=$_aggregationJarInstallPath_  state=directory
+    file: path=$_jarInstallPath_  state=directory
 
   - name: Create log path
-    file: path=$_aggregationLogDir_  state=directory
+    file: path=$_logDir_  state=directory
 
   - name: Copy aggregation jar
-    copy: src=$_aggregationJarSrc_  dest=$_aggregationJarInstallPath_
+    copy: src=$_jarSrc_  dest=$_jarInstallPath_
 
   - name: Start aggregation service
-    shell: $_aggregationStartCommand_
+    shell: $_startCommand_
 
   - name: Copy flume conf
-    copy: src=$_aggregationFlumeConfSrc_   dest=$_flumeConfPath_
+    copy: src=$_flumeConfSrc_   dest=$_flumeConfPath_

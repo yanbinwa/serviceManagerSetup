@@ -5,15 +5,15 @@
   tasks:
 
   - name: Unarchive the redis install package to remote machine
-    unarchive: src=$_redisPackage_  dest=$_redisPackageInstallPath_
+    unarchive: src=$_package_  dest=$_packageInstallPath_
 
   - name: Make and make install redis
-    shell: cd $_redisMakePath_ && make && make install
+    shell: cd $_makePath_ && make && make install
 
   - name: Copy redis conf redis.conf
-    copy: src=$_redisConfSrc_  dest=$_redisConfTarget_
+    copy: src=$_confSrc_  dest=$_confTarget_
 
   - name: Start redis service
-    shell: $_redisServerScript_
+    shell: $_serverScript_
 
 

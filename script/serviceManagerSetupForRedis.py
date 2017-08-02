@@ -1,29 +1,9 @@
 import os
+import serviceManagerSetupConstants
 
-DEVICE_KEY = "devices"
-
-REDIS_PACKAGE_KEY = "package"
-REDIS_TEMPLATE_KEY = "template"
-REDIS_INSTALL_PATH_KEY = "setup_dir"
-REDIS_CONF_PATH_KEY = "conf_dir"
-REDIS_CONF_FILE_KEY = "conf_file"
-REDIS_SERVER_SCRPIT_PATH_KEY = "serverScript"
 REDIS_MAKE_DIR_KEY = "make_dir"
 
-REDIS_NAME_KEY = "name"
-REDIS_USER_KEY = "user"
-REDIS_CONF_SRC_KEY = "conf"
-REDIS_ANSIBLE_FILE_PATH = "ansibleFile"
-
-REDIS_HOST_NAME_WORD = "$_hostname_"
-REDIS_HOST_USER_WORD = "$_user_"
-REDIS_PACKAGE_SRC_WORD = "$_redisPackage_"
-REDIS_PACKAGE_INSTALL_WORD = "$_redisPackageInstallPath_"
-REDIS_CONFIG_SRC_WORD = "$_redisConfSrc_"
-REDIS_CONFIG_TARGET_WORD = "$_redisConfTarget_"
-REDIS_CONFIG_TARGET_FILE_WORD = "$_redisConfFile_"
-REDIS_SERVER_SCRPIT_WORD = "$_redisServerScript_"
-REDIS_MAKE_DIR_WORD = "$_redisMakePath_"
+REDIS_MAKE_DIR_WORD = "$_makePath_"
 
 def setupAnsibleRedis(rootPath, rediss):
     if rediss == None:
@@ -31,15 +11,14 @@ def setupAnsibleRedis(rootPath, rediss):
         return
     
     redis_ansible_map = {}
-    redis_package_path = rootPath + rediss[REDIS_PACKAGE_KEY]
-    redis_template_file = rootPath + rediss[REDIS_TEMPLATE_KEY]
-    redis_install_path = rediss[REDIS_INSTALL_PATH_KEY]
-    redis_conf_path = rediss[REDIS_CONF_PATH_KEY]
-    redis_conf_file = rediss[REDIS_CONF_FILE_KEY]
-    redis_serverScript = rediss[REDIS_SERVER_SCRPIT_PATH_KEY]
+    redis_package_path = rootPath + rediss[serviceManagerSetupConstants.PACKAGE_KEY]
+    redis_template_file = rootPath + rediss[serviceManagerSetupConstants.TEMPLATE_KEY]
+    redis_install_path = rediss[serviceManagerSetupConstants.INSTALL_PATH_KEY]
+    redis_conf_path = rediss[serviceManagerSetupConstants.CONF_PATH_KEY]
+    redis_serverScript = rediss[serviceManagerSetupConstants.SERVER_SCRPIT_PATH_KEY]
     redis_make_dir = rediss[REDIS_MAKE_DIR_KEY]
     
-    devices = rediss[DEVICE_KEY]
+    devices = rediss[serviceManagerSetupConstants.DEVICE_KEY]
     if devices == None:
         print "The redis devices should not be Null"
         return -1
@@ -51,15 +30,14 @@ def setupAnsibleRedis(rootPath, rediss):
             continue
         
         redis_ansible_info = {}
-        redis_ansible_info[REDIS_HOST_NAME_WORD] = device[REDIS_NAME_KEY]
-        redis_ansible_info[REDIS_HOST_USER_WORD] = device[REDIS_USER_KEY]
-        redis_ansible_info[REDIS_PACKAGE_SRC_WORD] = redis_package_path
-        redis_ansible_info[REDIS_PACKAGE_INSTALL_WORD] = redis_install_path
-        redis_ansible_info[REDIS_CONFIG_SRC_WORD] = rootPath + device[REDIS_CONF_SRC_KEY]
-        redis_ansible_info[REDIS_CONFIG_TARGET_WORD] = redis_conf_path
-        redis_ansible_info[REDIS_CONFIG_TARGET_FILE_WORD] = redis_conf_file
-        redis_ansible_info[REDIS_ANSIBLE_FILE_PATH] = rootPath + device[REDIS_ANSIBLE_FILE_PATH]
-        redis_ansible_info[REDIS_SERVER_SCRPIT_WORD] = redis_serverScript
+        redis_ansible_info[serviceManagerSetupConstants.HOST_NAME_WORD] = device[serviceManagerSetupConstants.NAME_KEY]
+        redis_ansible_info[serviceManagerSetupConstants.HOST_USER_WORD] = device[serviceManagerSetupConstants.USER_KEY]
+        redis_ansible_info[serviceManagerSetupConstants.PACKAGE_SRC_WORD] = redis_package_path
+        redis_ansible_info[serviceManagerSetupConstants.PACKAGE_INSTALL_PATH_WORD] = redis_install_path
+        redis_ansible_info[serviceManagerSetupConstants.CONF_SRC_WORD] = rootPath + device[serviceManagerSetupConstants.CONF_SRC_KEY]
+        redis_ansible_info[serviceManagerSetupConstants.CONF_TARGET_WORD] = redis_conf_path
+        redis_ansible_info[serviceManagerSetupConstants.ANSIBLE_FILE_PATH] = rootPath + device[serviceManagerSetupConstants.ANSIBLE_FILE_PATH]
+        redis_ansible_info[serviceManagerSetupConstants.SERVER_SCRIPT_WORD] = redis_serverScript
         redis_ansible_info[REDIS_MAKE_DIR_WORD] = redis_make_dir
         redis_ansible_map[deviceKey] = redis_ansible_info
         
@@ -78,17 +56,16 @@ def buildAnsibleRedis(redis_template_file, redis_ansible_map):
             print "redis ansible info " + redisAnsibleInfoKey + " should not be Null"
             continue
         
-        tempTemplate = template.replace(REDIS_HOST_NAME_WORD, redisAnsibleInfo[REDIS_HOST_NAME_WORD])
-        tempTemplate = tempTemplate.replace(REDIS_HOST_USER_WORD, redisAnsibleInfo[REDIS_HOST_USER_WORD])
-        tempTemplate = tempTemplate.replace(REDIS_PACKAGE_SRC_WORD, redisAnsibleInfo[REDIS_PACKAGE_SRC_WORD])
-        tempTemplate = tempTemplate.replace(REDIS_PACKAGE_INSTALL_WORD, redisAnsibleInfo[REDIS_PACKAGE_INSTALL_WORD])
-        tempTemplate = tempTemplate.replace(REDIS_CONFIG_SRC_WORD, redisAnsibleInfo[REDIS_CONFIG_SRC_WORD])
-        tempTemplate = tempTemplate.replace(REDIS_CONFIG_TARGET_WORD, redisAnsibleInfo[REDIS_CONFIG_TARGET_WORD])
-        tempTemplate = tempTemplate.replace(REDIS_CONFIG_TARGET_FILE_WORD, redisAnsibleInfo[REDIS_CONFIG_TARGET_FILE_WORD])
-        tempTemplate = tempTemplate.replace(REDIS_SERVER_SCRPIT_WORD, redisAnsibleInfo[REDIS_SERVER_SCRPIT_WORD])
+        tempTemplate = template.replace(serviceManagerSetupConstants.HOST_NAME_WORD, redisAnsibleInfo[serviceManagerSetupConstants.HOST_NAME_WORD])
+        tempTemplate = tempTemplate.replace(serviceManagerSetupConstants.HOST_USER_WORD, redisAnsibleInfo[serviceManagerSetupConstants.HOST_USER_WORD])
+        tempTemplate = tempTemplate.replace(serviceManagerSetupConstants.PACKAGE_SRC_WORD, redisAnsibleInfo[serviceManagerSetupConstants.PACKAGE_SRC_WORD])
+        tempTemplate = tempTemplate.replace(serviceManagerSetupConstants.PACKAGE_INSTALL_PATH_WORD, redisAnsibleInfo[serviceManagerSetupConstants.PACKAGE_INSTALL_PATH_WORD])
+        tempTemplate = tempTemplate.replace(serviceManagerSetupConstants.CONF_SRC_WORD, redisAnsibleInfo[serviceManagerSetupConstants.CONF_SRC_WORD])
+        tempTemplate = tempTemplate.replace(serviceManagerSetupConstants.CONF_TARGET_WORD, redisAnsibleInfo[serviceManagerSetupConstants.CONF_TARGET_WORD])
+        tempTemplate = tempTemplate.replace(serviceManagerSetupConstants.SERVER_SCRIPT_WORD, redisAnsibleInfo[serviceManagerSetupConstants.SERVER_SCRIPT_WORD])
         tempTemplate = tempTemplate.replace(REDIS_MAKE_DIR_WORD, redisAnsibleInfo[REDIS_MAKE_DIR_WORD])
         
-        redisAnsibleFile = redisAnsibleInfo[REDIS_ANSIBLE_FILE_PATH]
+        redisAnsibleFile = redisAnsibleInfo[serviceManagerSetupConstants.ANSIBLE_FILE_PATH]
         redisAnsibleFileDir = redisAnsibleFile[:redisAnsibleFile.rindex("/")]
     
         if not os.path.exists(redisAnsibleFileDir):

@@ -5,7 +5,7 @@
   tasks:
 
   - name: Create logging root path
-    file: path=$_loggingRootPath_  state=directory
+    file: path=$_rootLogPath_  state=directory
 
   - name: Copy flume conf
-    copy: src=$_loggingFlumeConfSrc_   dest=$_flumeConfPath_
+    copy: src=$_flumeConfSrc_   dest=$_flumeConfPath_

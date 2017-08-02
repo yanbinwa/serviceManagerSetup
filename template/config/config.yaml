@@ -19,5 +19,5 @@
   - name: Copy manifest.yml
     copy: src=$_manifestSrc_  dest=$_manifestTarget_
 
-  - name: Start orchestration service
+  - name: Start config service
     shell: $_startCommand_

@@ -1,14 +1,17 @@
 #!/bin/bash
 
-ROOT_PATH=/root/yanbinwa/ansible
+DEL_SERVICE_NAME_LIST_STR=$1
 
-#stop and delete the original docker container
-dockerRunContainer=`docker ps | grep -v "CONTAINER ID"`
-if [ "$dockerRunContainer" != "" ]; then
-	docker stop $(docker ps -q)
+if [ "$DEL_SERVICE_NAME_LIST_STR" = "" ]; then
+    exit 0
 fi
 
-dockerExistContainer=`docker ps -a -q | grep -v "CONTAINER ID"`
-if [ "$dockerExistContainer" != "" ]; then
-	docker rm $(docker ps -a -q)
-fi
+serviceNameList=${DEL_SERVICE_NAME_LIST_STR//,/ }
+for serviceName in $serviceNameList
+do
+    containerId=`docker ps | grep $serviceName | awk '{print $1}'`
+    if [ "$containerId" != "" ]; then
+    	docker stop $containerId
+    	docker rm $containerId
+    fi
+done
