@@ -18,3 +18,7 @@
 
   - name: Copy flume conf
     copy: src=$_flumeConfSrc_   dest=$_flumeConfPath_
+
+  - name: pause 5s for service Start
+    pause:
+      seconds: 3

@@ -63,6 +63,22 @@ servicesInfo:
                 groupId : "aggregationTopic"
                 deserializerClass : "org.apache.kafka.common.serialization.StringDeserializer"
 
+        aggregation_standalone2:
+          serviceDataProperties:
+            serviceGroupName : "aggregation"
+            serviceName : "aggregation_standalone2"
+            ip : "172.18.0.82"
+            port : 8132
+            rootUrl : "/aggregation"
+            topicInfo : "{\"consumers\":{\"aggregationTopic\":[\"aggregationTopic_2\"]}}"
+          kafkaProperties:
+            consumers:
+              aggregationTopic_2:
+                brokerList : "172.18.0.41:9101"
+                consumerTopic : "aggregationTopic_2"
+                groupId : "aggregationTopic"
+                deserializerClass : "org.apache.kafka.common.serialization.StringDeserializer"
+
     cache:
       consoleLog : "/opt/cache/log/console.log"
       devices :
@@ -227,6 +243,19 @@ deployInfo:
           dockerNet : yanbin
           ansibleFile : /target/ansible/aggregation/aggregation_standalone.yaml
           applicationFile : /target/application/aggregation/application-standalone.yaml
+
+        aggregation_standalone2 :
+          name : aggregation_standalone2
+          user : root
+          password : cisco123
+          ip : 172.18.0.82
+          port : 8132
+          rootUrl : "/aggregation"
+          command : 'nohup java -Dspring.profiles.active=standalone2 -jar /opt/aggregation/serviceManagerAggregation-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
+          dockerImage : ubuntu:v2
+          dockerNet : yanbin
+          ansibleFile : /target/ansible/aggregation/aggregation_standalone2.yaml
+          applicationFile : /target/application/aggregation/application-standalone2.yaml
       
       features:
         flume:

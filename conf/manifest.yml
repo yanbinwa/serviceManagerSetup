@@ -50,7 +50,7 @@ components:
     setup_dir : /opt
     conf_dir : /opt/kafka_2.11-0.9.0.0/config
     log_dir : /root/kafka/log
-    serverScript : /opt/kafka_2.11-0.9.0.0/bin/kafka-server-start.sh
+    serverScript : /opt/kafka_2.11-0.9.0.0/bin/kafka-server-start.sh /opt/kafka_2.11-0.9.0.0/config/server.properties
     
     devices:
       kafka_standalone :

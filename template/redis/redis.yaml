@@ -16,4 +16,8 @@
   - name: Start redis service
     shell: $_serverScript_
 
+  - name: pause 5s for service Start
+    pause:
+      seconds: 3
+
 

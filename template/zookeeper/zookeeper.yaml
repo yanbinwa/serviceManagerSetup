@@ -21,3 +21,7 @@
 
   - name: Start zookeeper
     command: $_serverScript_ start
+
+  - name: pause 5s for service Start
+    pause:
+      seconds: 5

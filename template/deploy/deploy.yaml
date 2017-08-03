@@ -15,3 +15,7 @@
 
   - name: Start deploy service
     shell: $_startCommand_
+
+  - name: pause 5s for service Start
+    pause:
+      seconds: 3

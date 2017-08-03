@@ -14,4 +14,8 @@
     file: path=$_logDir_  state=directory  mode=0755
 
   - name: Start kafka
-    shell: nohup $_serverScript_  $_confFile_ 2>&1 > /dev/null &
+    shell: nohup $_serverScript_ 2>&1 > /dev/null &
+
+  - name: pause 5s for service Start
+    pause:
+      seconds: 5
