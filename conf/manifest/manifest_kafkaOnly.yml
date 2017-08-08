@@ -63,7 +63,7 @@ components:
         dockerImage : ubuntu:v2
         dockerNet : yanbin
         ansibleFile : /target/ansible/kafka/kafka_standalone.yaml
-        
+
   logging:
     template: /template/logging/logging.yaml
     devices:
@@ -86,62 +86,4 @@ components:
           flumeConfName: log.conf
           flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
           logFileRootPath: /opt/logging
-        
-  redis:
-    package : /package/redis/redis-2.8.0.tar.gz
-    template : /template/redis/redis.yaml
-    setup_dir : /opt
-    conf_dir : /opt/redis-2.8.0
-    serverScript : /opt/redis-2.8.0/src/redis-server /opt/redis-2.8.0/redis.conf
-    make_dir : /opt/redis-2.8.0
-    devices:
-      redis_1 :
-        name : redis_1
-        user : root
-        password : cisco123
-        ip : 172.18.0.71
-        port : 6381
-        dockerImage : ubuntu:v2
-        dockerNet : yanbin
-        conf : /conf/redis/redis_1/redis.conf
-        ansibleFile : /target/ansible/redis/redis_1.yaml
-
-  config:
-    package : /package/config/serviceManagerConfig-1.0-SNAPSHOT.jar
-    template : /template/config/config.yaml
-    setup_dir : /opt/config
-    logFilePath : /opt/config/log
-    logFiles : 'message,console'
-    manifest_src : /conf/config/manifest.yml
-    manifest_target : /opt/config/conf/manifest.yml
-    conf_dir : /opt/config/conf
-    devices :
-      config_standalone :
-        name : config_standalone
-        user : root
-        password : cisco123
-        ip : 172.18.0.91
-        port : 8141
-        command : 'nohup java -Dspring.profiles.active=standalone1 -jar /opt/config/serviceManagerConfig-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
-        dockerImage : ubuntu:v2
-        dockerNet : yanbin
-        ansibleFile : /target/ansible/config/config_standalone.yaml
-
-  deploy:
-    package : /package/deploy/serviceManagerDeploy-1.0-SNAPSHOT.jar
-    template : /template/deploy/deploy.yaml
-    setup_dir : /opt/deploy
-    logFilePath : /opt/deploy/log
-    logFiles : 'message,console'
-    devices :
-      deploy_standalone :
-        name : deploy_standalone
-        user : root
-        password : cisco123
-        ip : 172.18.0.101
-        port : 8151
-        command : 'nohup java -Dspring.profiles.active=standalone1 -jar /opt/deploy/serviceManagerDeploy-1.0-SNAPSHOT.jar 2>&1 > /dev/null &'
-        dockerImage : ubuntu:v2
-        dockerNet : yanbin
-        ansibleFile : /target/ansible/deploy/deploy_standalone.yaml
         

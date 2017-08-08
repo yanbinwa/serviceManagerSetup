@@ -24,7 +24,7 @@ servicesInfo:
                 serviceName : "redis_1"
                 redisHost: "172.18.0.71"
                 redisPort: "6381"
-          dependencyProperties : "{\"redisPartitionNum\":10,\"serviceDependency\":{\"cache\":[\"kafka\",\"redis\"],\"kafka\":[],\"aggregation\":[\"kafka\",\"cache\"],\"collection\":[\"kafka\",\"aggregation\",\"cache\"],\"redis\":[]},\"kafkaTopicInfo\":{\"aggregationTopic\":10}}"
+          dependencyProperties : "{\"redisPartitionNum\":10,\"serviceDependency\":{\"cache\":[\"kafka\",\"redis\"],\"kafka\":[],\"aggregation\":[\"kafka\",\"cache\"],\"collection\":[\"kafka\",\"aggregation\",\"cache\"],\"redis\":[]},\"kafkaTopicInfo\":{\"zookeeperHostport\":\"172.18.0.11:2191\",\"topics\":{\"aggregationTopic\":10}}}"
 
     collection:
       devices :
@@ -58,6 +58,7 @@ servicesInfo:
           kafkaProperties:
             consumers:
               aggregationTopic_1:
+                zookeeperHostport : "172.18.0.11:2191"
                 brokerList : "172.18.0.41:9101"
                 consumerTopic : "aggregationTopic_1"
                 groupId : "aggregationTopic"
@@ -168,7 +169,7 @@ deployInfo:
         flume:
           kafkaBrokerList: '172.18.0.41:9101'
           kafkaTopic: logging
-          kafkaPartitionId: 1
+          kafkaPartitionId: 0
           flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
           flumeConfTargetRootPath: /target/flume/collection
           flumeConfTemplate: /template/flume/logAgent.conf.template
@@ -200,7 +201,7 @@ deployInfo:
         flume:
           kafkaBrokerList: '172.18.0.41:9101'
           kafkaTopic: logging
-          kafkaPartitionId: 2
+          kafkaPartitionId: 0
           flumeConfInstallPath: /opt/apache-flume-1.7.0-bin/conf
           flumeConfTargetRootPath: /target/flume/cache
           flumeConfTemplate: /template/flume/logAgent.conf.template

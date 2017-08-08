@@ -94,6 +94,7 @@ def buildFlumeConf(rootPath, flume_info_map, logging_ansible_map):
                 
         flume_conf_info = {}
         flume_conf_info[serviceManagerSetupLogAggConf.KAFKA_BROKER_LIST_WORD] = flume_info_map[serviceManagerSetupConstants.FLUME_KAFKA_BROKER_LIST_KEY]
+        flume_conf_info[serviceManagerSetupLogAggConf.KAFKA_LOGGING_GROUP_ID_WORD] = flume_info_map[serviceManagerSetupConstants.FLUME_KAFKA_LOGGING_GROUP_ID_KEY]
         flume_conf_info[serviceManagerSetupLogAggConf.KAFKA_LOGGING_TOPIC_WORD] = flume_info_map[serviceManagerSetupConstants.FLUME_KAFKA_LOGGING_TOPIC_KEY]
         flume_conf_info[serviceManagerSetupLogAggConf.FLUME_CONF_TARGET_PATH_KEY] = loggingAnsibleInfo[serviceManagerSetupConstants.FLUME_CONF_SRC_WORD]
         flume_conf_info[serviceManagerSetupLogAggConf.LOG_FILE_ROOT_PATH_WORD] = flume_info_map[LOGGING_LOG_FILE_ROOT_PATH]

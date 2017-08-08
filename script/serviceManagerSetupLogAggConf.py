@@ -1,6 +1,7 @@
 import os
 
 KAFKA_BROKER_LIST_WORD = "$_kafkaBrokerList_"
+KAFKA_LOGGING_GROUP_ID_WORD = "$_kafkaGroupId_"
 KAFKA_LOGGING_TOPIC_WORD = "$_kafkaTopic_"
 LOG_FILE_ROOT_PATH_WORD = "$_logFileRootPath_"
 FLUME_CONF_TARGET_PATH_KEY = "flumeConfTargetPath"
@@ -17,6 +18,7 @@ def buildFlumeLogAggConf(flume_Conf_Template_file, flumeLogAggProperties):
         
     template = open(flume_Conf_Template_file).read()
     template = template.replace(KAFKA_BROKER_LIST_WORD, flumeLogAggProperties[KAFKA_BROKER_LIST_WORD])
+    template = template.replace(KAFKA_LOGGING_GROUP_ID_WORD, flumeLogAggProperties[KAFKA_LOGGING_GROUP_ID_WORD])
     template = template.replace(KAFKA_LOGGING_TOPIC_WORD, flumeLogAggProperties[KAFKA_LOGGING_TOPIC_WORD])
     template = template.replace(LOG_FILE_ROOT_PATH_WORD, flumeLogAggProperties[LOG_FILE_ROOT_PATH_WORD])
     

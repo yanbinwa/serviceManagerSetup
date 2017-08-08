@@ -61,6 +61,7 @@ class serviceManagerSetup:
             print "The components should not be Null"
             exit(-1)
            
+        self.commons = None
         if self.manifest.has_key(COMMON_KEY):    
             self.commons = self.manifest[COMMON_KEY]
                 

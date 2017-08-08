@@ -39,6 +39,7 @@ FLUME_CONF_TEMPLATE_KEY = "flumeConfTemplate"
 FLUME_CONF_SRC_TEMPLATE_KEY = "flumeConfSrcTemplate"
 FLUME_KAFKA_BROKER_LIST_KEY = "kafkaBrokerList"
 FLUME_KAFKA_LOGGING_TOPIC_KEY = "kafkaTopic"
+FLUME_KAFKA_LOGGING_GROUP_ID_KEY = "kafkaGroupId"
 FLUME_KAFKA_PARTITION_ID_KEY = "kafkaPartitionId"
 
 FEATURES_KEY = "features"

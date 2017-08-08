@@ -82,20 +82,20 @@ def setupAnsibleCommonHost(ansibleHostPath, components, commons, host_map):
             continue
         
         serviceGroupListStr = commonService[ANSIBLE_HOST_SERVICEGROUP_TAG]
-        if serviceGroupListStr == None:
+        if serviceGroupListStr == None or serviceGroupListStr == '':
             print "serviceGroupListStr should not be empty" + commonServiceKey
             continue
         
         common_host_map = {}
         serviceGroupList = serviceGroupListStr.split(',')
-        for serviceGourp in serviceGroupList:
-            component = components[serviceGourp]
+        for serviceGroup in serviceGroupList:
+            component = components[serviceGroup]
             if component == None:
-                print "components should contain the component " + serviceGourp
+                print "components should contain the component " + serviceGroup
                 continue
             devices = component[DEVICE_KEY]
             if devices == None:
-                print "The device " + serviceGourp + " should not be Null"
+                print "The device " + serviceGroup + " should not be Null"
                 continue
             
             for hostKey in devices.keys():
@@ -105,8 +105,7 @@ def setupAnsibleCommonHost(ansibleHostPath, components, commons, host_map):
                     continue
                 common_host_map[hostKey] = host_map[hostKey]
         
-        
-    buildAnsibleCommonHost(ansibleHostPath, commonServiceKey, common_host_map)       
+        buildAnsibleCommonHost(ansibleHostPath, commonServiceKey, common_host_map)
     
 def buildAnsibleCommonHost(ansibleHostPath, commonHostName, common_host_map):
     ansibleHostFile = os.open(ansibleHostPath, os.O_APPEND|os.O_RDWR)
