@@ -97,9 +97,9 @@ deployInfo:
   deployService : deploy_standalone
 
   baseInfo:
-    deploy_server_ip : "192.168.56.17"
+    deploy_server_ip : "192.168.56.11"
     deploy_server_username : root
-    deploy_server_password : Wyb13403408973
+    deploy_server_password : emotibot
     root_path : /root/yanbinwa/ansible
     ansible_host : /target/ansible/host.template
     ansible_main : /target/ansible/main.yaml

@@ -59,7 +59,7 @@ def buildDockerContainerScript(dockerContainerFile, docker_container_map):
                           " -p " + str(dockerContainer[DOCKER_CONTAINER_PORT_KEY]) + ":" + str(dockerContainer[DOCKER_CONTAINER_PORT_KEY]) + \
                           " --ip " + dockerContainer[DOCKER_CONTAINER_IP_KEY] + \
                           " --name " + dockerContainer[DOCKER_CONTAINER_NAME_KEY] + \
-                          " " + dockerContainer[DOCKER_CONTAINER_IMAGE_KEY] + " /bin/bash\n"
+                          " " + dockerContainer[DOCKER_CONTAINER_IMAGE_KEY] + "\n"
         os.write(dockerContainerScriptFile, command)
         
     os.close(dockerContainerScriptFile)    

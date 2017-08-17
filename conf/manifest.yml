@@ -23,13 +23,13 @@ commons:
 
 components:
   zookeeper :
-    package : /package/zookeeper/zookeeper-3.4.6.tar.gz
+    package : /package/zookeeper/zookeeper-3.4.10.tar.gz
     template : /template/zookeeper/zookeeper.yaml
     setup_dir : /opt
-    conf_dir : /opt/zookeeper-3.4.6/conf
+    conf_dir : /opt/zookeeper-3.4.10/conf
     data_dir : /root/zookeeper/data
     dataLog_dir : /root/zookeeper/dataLog
-    serverScript : /opt/zookeeper-3.4.6/bin/zkServer.sh
+    serverScript : /opt/zookeeper-3.4.10/bin/zkServer.sh
     
     devices:
       zookeeper_standalone :
@@ -45,12 +45,12 @@ components:
         ansibleFile : /target/ansible/zookeeper/zookeeper_standalone.yaml
         
   kafka:
-    package : /package/kafka/kafka_2.11-0.9.0.0.tgz
+    package : /package/kafka/kafka_2.11-0.11.0.0.tgz
     template : /template/kafka/kafka.yaml
     setup_dir : /opt
-    conf_dir : /opt/kafka_2.11-0.9.0.0/config
+    conf_dir : /opt/kafka_2.11-0.11.0.0/config
     log_dir : /root/kafka/log
-    serverScript : /opt/kafka_2.11-0.9.0.0/bin/kafka-server-start.sh /opt/kafka_2.11-0.9.0.0/config/server.properties
+    serverScript : /opt/kafka_2.11-0.11.0.0/bin/kafka-server-start.sh /opt/kafka_2.11-0.11.0.0/config/server.properties
     
     devices:
       kafka_standalone :
@@ -88,12 +88,12 @@ components:
           logFileRootPath: /opt/logging
         
   redis:
-    package : /package/redis/redis-2.8.0.tar.gz
+    package : /package/redis/redis-3.2.10.tar.gz
     template : /template/redis/redis.yaml
     setup_dir : /opt
-    conf_dir : /opt/redis-2.8.0
-    serverScript : /opt/redis-2.8.0/src/redis-server /opt/redis-2.8.0/redis.conf
-    make_dir : /opt/redis-2.8.0
+    conf_dir : /opt/redis-3.2.10
+    serverScript : /opt/redis-3.2.10/src/redis-server /opt/redis-3.2.10/redis.conf
+    make_dir : /opt/redis-3.2.10
     devices:
       redis_1 :
         name : redis_1
